@@ -12,7 +12,7 @@
 
 <meta name="author" content="Stuart Lacy" />
 
-<meta name="date" content="2018-06-16" />
+<meta name="date" content="2018-07-18" />
 
 <title>Examples</title>
 
@@ -1783,7 +1783,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Examples</h1>
 <h4 class="author"><em>Stuart Lacy</em></h4>
-<h4 class="date"><em>2018-06-16</em></h4>
+<h4 class="date"><em>2018-07-18</em></h4>
 
 
 
@@ -1807,13 +1807,13 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; 5  5     29      1     422       1    AML 20-40 No gender mismatch No TCD</span></a>
 <a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt; 6  6     38      1     119       1    ALL   &gt;40 No gender mismatch No TCD</span></a></code></pre></div>
 <p><code>mstate</code> provides a host of utility functions for working with multi-state models. For example, the <code>trans.illdeath()</code> function provides the required transition matrix for this state structure (<code>transMat</code> should be used when greater flexibility is required).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">tmat &lt;-<span class="st"> </span><span class="kw">trans.illdeath</span>()</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">tmat &lt;-<span class="st"> </span><span class="kw">trans.illdeath</span>(<span class="kw">c</span>(<span class="st">'transplant'</span>, <span class="st">'pr'</span>, <span class="st">'rfs'</span>))</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">tmat</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;          to</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; from      healthy illness death</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt;   healthy      NA       1     2</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt;   illness      NA      NA     3</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt;   death        NA      NA    NA</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;             to</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; from         transplant pr rfs</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt;   transplant         NA  1   2</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt;   pr                 NA NA   3</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt;   rfs                NA NA  NA</span></a></code></pre></div>
 <p>The final data preparation step is to form the data from a wide format (each row corresponding to a patient) to a long format, where each row represents a potential patient-transition. The <code>msprep</code> function from <code>mstate</code> handles this for us. We’ll keep both the <code>age</code> and <code>dissub</code> covariates in this example.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">long &lt;-<span class="st"> </span><span class="kw">msprep</span>(<span class="dt">time=</span><span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">'prtime'</span>, <span class="st">'rfstime'</span>), </a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">               <span class="dt">status=</span><span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">'prstat'</span>, <span class="st">'rfsstat'</span>), </a>
@@ -1850,14 +1850,14 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li><span class="math inline">\(h\)</span> - not specified as the probabilities are calculated for all states</li>
 <li><span class="math inline">\(j\)</span> - not specified as the probabilities are calculated for all states</li>
 </ul>
-<p>The code example below shows how to calculate transition probabilities for <span class="math inline">\(t=365\)</span> (1 year) with <span class="math inline">\(s=0\)</span>; the transition probabilities for every state at 1 year after transplant given being in every state at transplant time. As with <code>pmatrix.simfs</code>, although all the probabilities for every pairwise combination of states are calculated, they are sometimes redundant. For example, <span class="math inline">\(P_{h,j}(0, 365)\)</span> where <span class="math inline">\(h=j=\text{death}\)</span> is hardly a useful prediction.</p>
+<p>The code example below shows how to calculate transition probabilities for <span class="math inline">\(t=365\)</span> (1 year) with <span class="math inline">\(s=0\)</span>; the transition probabilities for every state at 1 year after transplant given being in every state at transplant time. As with <code>pmatrix.simfs</code>, although all the probabilities for every pairwise combination of states are calculated, they are sometimes redundant. For example, <span class="math inline">\(P_{h,j}(0, 365)\)</span> where <span class="math inline">\(h=j=\text{rfs}\)</span> is hardly a useful prediction.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(multistateutils)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">predict_transitions</span>(models, newdata, tmat, <span class="dt">times=</span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;     age dissub start_time end_time start_state   healthy   illness</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; 1 20-40    AML          0      365     healthy 0.4689727 0.1960009</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 2 20-40    AML          0      365     illness 0.0000000 0.6860803</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 3 20-40    AML          0      365       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;       death</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;     age dissub start_time end_time start_state transplant        pr</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; 1 20-40    AML          0      365  transplant  0.4689727 0.1960009</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 2 20-40    AML          0      365          pr  0.0000000 0.6860803</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 3 20-40    AML          0      365         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;         rfs</span></a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; 1 0.3350264</span></a>
 <a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; 2 0.3139197</span></a>
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; 3 1.0000000</span></a></code></pre></div>
@@ -1869,27 +1869,27 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; [3,] 0.00000 0.00000 1.00000</span></a></code></pre></div>
 <p>Confidence intervals can be constructed in the same fashion as <code>pmatrix.simfs</code>, using draws from the multivariate-normal distribution of the parameter estimates.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">predict_transitions</span>(models, newdata, tmat, <span class="dt">times=</span><span class="dv">365</span>, <span class="dt">ci=</span><span class="ot">TRUE</span>, <span class="dt">M=</span><span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt;     age dissub start_time end_time start_state healthy_est illness_est</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML          0      365     healthy   0.4686388   0.1911846</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML          0      365     illness   0.0000000   0.6842958</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML          0      365       death   0.0000000   0.0000000</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;   death_est healthy_2.5% illness_2.5% death_2.5% healthy_97.5%</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; 1 0.3401765    0.4466409    0.1815267  0.3255840     0.4852701</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; 2 0.3157042    0.0000000    0.6730746  0.3019661     0.0000000</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; 3 1.0000000    0.0000000    0.0000000  1.0000000     0.0000000</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;   illness_97.5% death_97.5%</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; 1     0.1986574   0.3578461</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; 2     0.6980339   0.3269254</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; 3     0.0000000   1.0000000</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt;     age dissub start_time end_time start_state transplant_est    pr_est</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML          0      365  transplant      0.4694436 0.1946468</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML          0      365          pr      0.0000000 0.6889348</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML          0      365         rfs      0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt;     rfs_est transplant_2.5%   pr_2.5%  rfs_2.5% transplant_97.5%  pr_97.5%</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; 1 0.3359096       0.4573342 0.1770981 0.3199084        0.4822301 0.2038494</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; 2 0.3110652       0.0000000 0.6706948 0.2923926        0.0000000 0.7076074</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; 3 1.0000000       0.0000000 0.0000000 1.0000000        0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;   rfs_97.5%</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; 1 0.3535072</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; 2 0.3293052</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; 3 1.0000000</span></a></code></pre></div>
 <p>Which gives rather different results to those obtained from <code>pmatrix.simfs</code> which seem to be too wide and the estimate value is far different to that obtained when run without CIs. I’m unsure why this is the case.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">pmatrix.simfs</span>(models, tmat, <span class="dt">newdata=</span>newdata, <span class="dt">t=</span><span class="dv">365</span>, <span class="dt">ci=</span><span class="ot">TRUE</span>, <span class="dt">M=</span><span class="dv">9</span>)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt;           [,1]      [,2]      [,3]</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; [1,] 0.5555556 0.2222222 0.2222222</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; [1,] 0.4444444 0.1111111 0.4444444</span></a>
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; [2,] 0.0000000 0.7777778 0.2222222</span></a>
 <a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; [3,] 0.0000000 0.0000000 1.0000000</span></a>
 <a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; attr(,&quot;lower&quot;)</span></a>
 <a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt;           [,1]      [,2] [,3]</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; [1,] 0.2222222 0.0000000    0</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; [1,] 0.2194444 0.0000000    0</span></a>
 <a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; [2,] 0.0000000 0.3333333    0</span></a>
 <a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt; [3,] 0.0000000 0.0000000    1</span></a>
 <a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt; attr(,&quot;upper&quot;)</span></a>
@@ -1904,103 +1904,103 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">microbenchmark</span>(<span class="st">&quot;multistateutils&quot;</span>=<span class="kw">predict_transitions</span>(models, newdata, tmat, <span class="dt">times=</span><span class="dv">365</span>),</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">               <span class="st">&quot;flexsurv&quot;</span>=<span class="kw">pmatrix.simfs</span>(models, tmat, <span class="dt">newdata=</span>newdata, <span class="dt">t=</span><span class="dv">365</span>), <span class="dt">times=</span><span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; Unit: milliseconds</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;             expr       min        lq     mean    median        uq</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  multistateutils 1114.2380 1214.3507 1252.230 1230.4602 1310.4883</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;         flexsurv  241.3852  251.2107  260.576  257.5595  266.5561</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;        max neval cld</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  1437.4384    10   b</span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;   308.6954    10  a</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;             expr       min       lq     mean    median        uq       max</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  multistateutils 1450.1096 1488.913 1616.460 1602.2209 1697.7792 1815.5686</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;         flexsurv  264.0724  273.015  289.901  277.7024  298.0332  381.1725</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  neval cld</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;     10   b</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;     10  a</span></a></code></pre></div>
 <div id="estimating-probabilities-at-multiple-times" class="section level3">
 <h3>Estimating probabilities at multiple times</h3>
 <p>Frequently, it is desirable to estimate transition probabilities at multiple values of <span class="math inline">\(t\)</span>, in order to build up a picture of an individual’s disease progression. <code>pmatrix.simfs</code> only allows a scalar for <span class="math inline">\(t\)</span>, so estimating probabilities at multiple values requires manually iterating through the time-scale. In the example below we will calculate transition probabilities at yearly intervals for 9 years.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">predict_transitions</span>(models, newdata, tmat, <span class="dt">times=</span><span class="kw">seq</span>(<span class="dv">9</span>)<span class="op">*</span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt;      age dissub start_time end_time start_state   healthy   illness</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; 1  20-40    AML          0      365     healthy 0.4664881 0.1928780</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; 2  20-40    AML          0      365     illness 0.0000000 0.6840082</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; 3  20-40    AML          0      365       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; 4  20-40    AML          0      730     healthy 0.3532633 0.2070860</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; 5  20-40    AML          0      730     illness 0.0000000 0.5915287</span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; 6  20-40    AML          0      730       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; 7  20-40    AML          0     1095     healthy 0.2852604 0.2080053</span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; 8  20-40    AML          0     1095     illness 0.0000000 0.5306363</span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; 9  20-40    AML          0     1095       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; 10 20-40    AML          0     1460     healthy 0.2390992 0.2047480</span></a>
-<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; 11 20-40    AML          0     1460     illness 0.0000000 0.4851973</span></a>
-<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; 12 20-40    AML          0     1460       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; 13 20-40    AML          0     1825     healthy 0.2057272 0.1983334</span></a>
-<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; 14 20-40    AML          0     1825     illness 0.0000000 0.4494665</span></a>
-<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; 15 20-40    AML          0     1825       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt; 16 20-40    AML          0     2190     healthy 0.1792694 0.1913593</span></a>
-<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt; 17 20-40    AML          0     2190     illness 0.0000000 0.4200813</span></a>
-<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt; 18 20-40    AML          0     2190       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-21" data-line-number="21"><span class="co">#&gt; 19 20-40    AML          0     2555     healthy 0.1583470 0.1845849</span></a>
-<a class="sourceLine" id="cb11-22" data-line-number="22"><span class="co">#&gt; 20 20-40    AML          0     2555     illness 0.0000000 0.3951598</span></a>
-<a class="sourceLine" id="cb11-23" data-line-number="23"><span class="co">#&gt; 21 20-40    AML          0     2555       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; 22 20-40    AML          0     2920     healthy 0.1407817 0.1788897</span></a>
-<a class="sourceLine" id="cb11-25" data-line-number="25"><span class="co">#&gt; 23 20-40    AML          0     2920     illness 0.0000000 0.3710391</span></a>
-<a class="sourceLine" id="cb11-26" data-line-number="26"><span class="co">#&gt; 24 20-40    AML          0     2920       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-27" data-line-number="27"><span class="co">#&gt; 25 20-40    AML          0     3285     healthy 0.1254346 0.1726750</span></a>
-<a class="sourceLine" id="cb11-28" data-line-number="28"><span class="co">#&gt; 26 20-40    AML          0     3285     illness 0.0000000 0.3518226</span></a>
-<a class="sourceLine" id="cb11-29" data-line-number="29"><span class="co">#&gt; 27 20-40    AML          0     3285       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb11-30" data-line-number="30"><span class="co">#&gt;        death</span></a>
-<a class="sourceLine" id="cb11-31" data-line-number="31"><span class="co">#&gt; 1  0.3406339</span></a>
-<a class="sourceLine" id="cb11-32" data-line-number="32"><span class="co">#&gt; 2  0.3159918</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt;      age dissub start_time end_time start_state transplant        pr</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; 1  20-40    AML          0      365  transplant  0.4699190 0.1929019</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; 2  20-40    AML          0      365          pr  0.0000000 0.6845554</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; 3  20-40    AML          0      365         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; 4  20-40    AML          0      730  transplant  0.3535870 0.2067148</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; 5  20-40    AML          0      730          pr  0.0000000 0.5951183</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; 6  20-40    AML          0      730         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; 7  20-40    AML          0     1095  transplant  0.2846022 0.2090303</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; 8  20-40    AML          0     1095          pr  0.0000000 0.5358009</span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; 9  20-40    AML          0     1095         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; 10 20-40    AML          0     1460  transplant  0.2382730 0.2051978</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; 11 20-40    AML          0     1460          pr  0.0000000 0.4907316</span></a>
+<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; 12 20-40    AML          0     1460         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; 13 20-40    AML          0     1825  transplant  0.2043994 0.1994890</span></a>
+<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; 14 20-40    AML          0     1825          pr  0.0000000 0.4544598</span></a>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; 15 20-40    AML          0     1825         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt; 16 20-40    AML          0     2190  transplant  0.1774322 0.1943790</span></a>
+<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt; 17 20-40    AML          0     2190          pr  0.0000000 0.4237590</span></a>
+<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt; 18 20-40    AML          0     2190         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-21" data-line-number="21"><span class="co">#&gt; 19 20-40    AML          0     2555  transplant  0.1565132 0.1875923</span></a>
+<a class="sourceLine" id="cb11-22" data-line-number="22"><span class="co">#&gt; 20 20-40    AML          0     2555          pr  0.0000000 0.3985892</span></a>
+<a class="sourceLine" id="cb11-23" data-line-number="23"><span class="co">#&gt; 21 20-40    AML          0     2555         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; 22 20-40    AML          0     2920  transplant  0.1395664 0.1813845</span></a>
+<a class="sourceLine" id="cb11-25" data-line-number="25"><span class="co">#&gt; 23 20-40    AML          0     2920          pr  0.0000000 0.3763652</span></a>
+<a class="sourceLine" id="cb11-26" data-line-number="26"><span class="co">#&gt; 24 20-40    AML          0     2920         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-27" data-line-number="27"><span class="co">#&gt; 25 20-40    AML          0     3285  transplant  0.1244361 0.1759551</span></a>
+<a class="sourceLine" id="cb11-28" data-line-number="28"><span class="co">#&gt; 26 20-40    AML          0     3285          pr  0.0000000 0.3565460</span></a>
+<a class="sourceLine" id="cb11-29" data-line-number="29"><span class="co">#&gt; 27 20-40    AML          0     3285         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb11-30" data-line-number="30"><span class="co">#&gt;          rfs</span></a>
+<a class="sourceLine" id="cb11-31" data-line-number="31"><span class="co">#&gt; 1  0.3371791</span></a>
+<a class="sourceLine" id="cb11-32" data-line-number="32"><span class="co">#&gt; 2  0.3154446</span></a>
 <a class="sourceLine" id="cb11-33" data-line-number="33"><span class="co">#&gt; 3  1.0000000</span></a>
-<a class="sourceLine" id="cb11-34" data-line-number="34"><span class="co">#&gt; 4  0.4396507</span></a>
-<a class="sourceLine" id="cb11-35" data-line-number="35"><span class="co">#&gt; 5  0.4084713</span></a>
+<a class="sourceLine" id="cb11-34" data-line-number="34"><span class="co">#&gt; 4  0.4396982</span></a>
+<a class="sourceLine" id="cb11-35" data-line-number="35"><span class="co">#&gt; 5  0.4048817</span></a>
 <a class="sourceLine" id="cb11-36" data-line-number="36"><span class="co">#&gt; 6  1.0000000</span></a>
-<a class="sourceLine" id="cb11-37" data-line-number="37"><span class="co">#&gt; 7  0.5067343</span></a>
-<a class="sourceLine" id="cb11-38" data-line-number="38"><span class="co">#&gt; 8  0.4693637</span></a>
+<a class="sourceLine" id="cb11-37" data-line-number="37"><span class="co">#&gt; 7  0.5063675</span></a>
+<a class="sourceLine" id="cb11-38" data-line-number="38"><span class="co">#&gt; 8  0.4641991</span></a>
 <a class="sourceLine" id="cb11-39" data-line-number="39"><span class="co">#&gt; 9  1.0000000</span></a>
-<a class="sourceLine" id="cb11-40" data-line-number="40"><span class="co">#&gt; 10 0.5561528</span></a>
-<a class="sourceLine" id="cb11-41" data-line-number="41"><span class="co">#&gt; 11 0.5148027</span></a>
+<a class="sourceLine" id="cb11-40" data-line-number="40"><span class="co">#&gt; 10 0.5565292</span></a>
+<a class="sourceLine" id="cb11-41" data-line-number="41"><span class="co">#&gt; 11 0.5092684</span></a>
 <a class="sourceLine" id="cb11-42" data-line-number="42"><span class="co">#&gt; 12 1.0000000</span></a>
-<a class="sourceLine" id="cb11-43" data-line-number="43"><span class="co">#&gt; 13 0.5959394</span></a>
-<a class="sourceLine" id="cb11-44" data-line-number="44"><span class="co">#&gt; 14 0.5505335</span></a>
+<a class="sourceLine" id="cb11-43" data-line-number="43"><span class="co">#&gt; 13 0.5961116</span></a>
+<a class="sourceLine" id="cb11-44" data-line-number="44"><span class="co">#&gt; 14 0.5455402</span></a>
 <a class="sourceLine" id="cb11-45" data-line-number="45"><span class="co">#&gt; 15 1.0000000</span></a>
-<a class="sourceLine" id="cb11-46" data-line-number="46"><span class="co">#&gt; 16 0.6293713</span></a>
-<a class="sourceLine" id="cb11-47" data-line-number="47"><span class="co">#&gt; 17 0.5799187</span></a>
+<a class="sourceLine" id="cb11-46" data-line-number="46"><span class="co">#&gt; 16 0.6281888</span></a>
+<a class="sourceLine" id="cb11-47" data-line-number="47"><span class="co">#&gt; 17 0.5762410</span></a>
 <a class="sourceLine" id="cb11-48" data-line-number="48"><span class="co">#&gt; 18 1.0000000</span></a>
-<a class="sourceLine" id="cb11-49" data-line-number="49"><span class="co">#&gt; 19 0.6570681</span></a>
-<a class="sourceLine" id="cb11-50" data-line-number="50"><span class="co">#&gt; 20 0.6048402</span></a>
+<a class="sourceLine" id="cb11-49" data-line-number="49"><span class="co">#&gt; 19 0.6558944</span></a>
+<a class="sourceLine" id="cb11-50" data-line-number="50"><span class="co">#&gt; 20 0.6014108</span></a>
 <a class="sourceLine" id="cb11-51" data-line-number="51"><span class="co">#&gt; 21 1.0000000</span></a>
-<a class="sourceLine" id="cb11-52" data-line-number="52"><span class="co">#&gt; 22 0.6803285</span></a>
-<a class="sourceLine" id="cb11-53" data-line-number="53"><span class="co">#&gt; 23 0.6289609</span></a>
+<a class="sourceLine" id="cb11-52" data-line-number="52"><span class="co">#&gt; 22 0.6790491</span></a>
+<a class="sourceLine" id="cb11-53" data-line-number="53"><span class="co">#&gt; 23 0.6236348</span></a>
 <a class="sourceLine" id="cb11-54" data-line-number="54"><span class="co">#&gt; 24 1.0000000</span></a>
-<a class="sourceLine" id="cb11-55" data-line-number="55"><span class="co">#&gt; 25 0.7018904</span></a>
-<a class="sourceLine" id="cb11-56" data-line-number="56"><span class="co">#&gt; 26 0.6481774</span></a>
+<a class="sourceLine" id="cb11-55" data-line-number="55"><span class="co">#&gt; 25 0.6996088</span></a>
+<a class="sourceLine" id="cb11-56" data-line-number="56"><span class="co">#&gt; 26 0.6434540</span></a>
 <a class="sourceLine" id="cb11-57" data-line-number="57"><span class="co">#&gt; 27 1.0000000</span></a></code></pre></div>
 <p>In <code>pmatrix.simfs</code> it is up to the user to manipulate the output to make it interpretable. Again, the probabilities agree with each other.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">do.call</span>(<span class="st">'rbind'</span>, <span class="kw">lapply</span>(<span class="kw">seq</span>(<span class="dv">9</span>)<span class="op">*</span><span class="dv">365</span>, <span class="cf">function</span>(t) {</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">    <span class="kw">pmatrix.simfs</span>(models, tmat, <span class="dt">newdata=</span>newdata, <span class="dt">t=</span>t)</a>
 <a class="sourceLine" id="cb12-3" data-line-number="3">}))</a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt;          [,1]    [,2]    [,3]</span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt;  [1,] 0.46678 0.19556 0.33766</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;  [2,] 0.00000 0.68826 0.31174</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt;  [1,] 0.47188 0.19051 0.33761</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;  [2,] 0.00000 0.68541 0.31459</span></a>
 <a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;  [3,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;  [4,] 0.35336 0.20707 0.43957</span></a>
-<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt;  [5,] 0.00000 0.59502 0.40498</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;  [4,] 0.35126 0.20851 0.44023</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt;  [5,] 0.00000 0.59446 0.40554</span></a>
 <a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt;  [6,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt;  [7,] 0.28774 0.20751 0.50475</span></a>
-<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt;  [8,] 0.00000 0.53664 0.46336</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt;  [7,] 0.28244 0.20925 0.50831</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt;  [8,] 0.00000 0.53275 0.46725</span></a>
 <a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt;  [9,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; [10,] 0.23865 0.20370 0.55765</span></a>
-<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; [11,] 0.00000 0.49079 0.50921</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; [10,] 0.23928 0.20773 0.55299</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; [11,] 0.00000 0.48841 0.51159</span></a>
 <a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; [12,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; [13,] 0.20491 0.19849 0.59660</span></a>
-<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; [14,] 0.00000 0.45223 0.54777</span></a>
+<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co">#&gt; [13,] 0.20376 0.20019 0.59605</span></a>
+<a class="sourceLine" id="cb12-18" data-line-number="18"><span class="co">#&gt; [14,] 0.00000 0.45401 0.54599</span></a>
 <a class="sourceLine" id="cb12-19" data-line-number="19"><span class="co">#&gt; [15,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; [16,] 0.17759 0.19201 0.63040</span></a>
-<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; [17,] 0.00000 0.42195 0.57805</span></a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"><span class="co">#&gt; [16,] 0.17816 0.19415 0.62769</span></a>
+<a class="sourceLine" id="cb12-21" data-line-number="21"><span class="co">#&gt; [17,] 0.00000 0.41977 0.58023</span></a>
 <a class="sourceLine" id="cb12-22" data-line-number="22"><span class="co">#&gt; [18,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; [19,] 0.15781 0.18373 0.65846</span></a>
-<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt; [20,] 0.00000 0.39903 0.60097</span></a>
+<a class="sourceLine" id="cb12-23" data-line-number="23"><span class="co">#&gt; [19,] 0.15853 0.18885 0.65262</span></a>
+<a class="sourceLine" id="cb12-24" data-line-number="24"><span class="co">#&gt; [20,] 0.00000 0.39682 0.60318</span></a>
 <a class="sourceLine" id="cb12-25" data-line-number="25"><span class="co">#&gt; [21,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; [22,] 0.13890 0.17927 0.68183</span></a>
-<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; [23,] 0.00000 0.37531 0.62469</span></a>
+<a class="sourceLine" id="cb12-26" data-line-number="26"><span class="co">#&gt; [22,] 0.13946 0.17990 0.68064</span></a>
+<a class="sourceLine" id="cb12-27" data-line-number="27"><span class="co">#&gt; [23,] 0.00000 0.37160 0.62840</span></a>
 <a class="sourceLine" id="cb12-28" data-line-number="28"><span class="co">#&gt; [24,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; [25,] 0.12540 0.17372 0.70088</span></a>
-<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; [26,] 0.00000 0.35274 0.64726</span></a>
+<a class="sourceLine" id="cb12-29" data-line-number="29"><span class="co">#&gt; [25,] 0.12302 0.17257 0.70441</span></a>
+<a class="sourceLine" id="cb12-30" data-line-number="30"><span class="co">#&gt; [26,] 0.00000 0.35692 0.64308</span></a>
 <a class="sourceLine" id="cb12-31" data-line-number="31"><span class="co">#&gt; [27,] 0.00000 0.00000 1.00000</span></a></code></pre></div>
 <p>By removing this boilerplate code, the speed increase starts to show, with the calculation of 8 additional time-points only increasing the runtime by 61% from 1.2s to 2s, while <code>flexsurv</code> has a twelve-fold increase from 0.3s to 3.7s.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">microbenchmark</span>(<span class="st">&quot;multistateutils&quot;</span>=<span class="kw">predict_transitions</span>(models, newdata, tmat, <span class="dt">times=</span><span class="kw">seq</span>(<span class="dv">9</span>)<span class="op">*</span><span class="dv">365</span>),</a>
@@ -2009,8 +2009,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb13-4" data-line-number="4">               }, <span class="dt">times=</span><span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt; Unit: seconds</span></a>
 <a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;             expr      min       lq     mean   median       uq      max</span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;  multistateutils 1.740958 1.751386 1.821980 1.835986 1.874570 1.894644</span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt;         flexsurv 2.399052 2.496191 2.552497 2.533270 2.601157 2.745994</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;  multistateutils 2.025035 2.113716 2.182311 2.183984 2.243815 2.325735</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt;         flexsurv 2.420008 2.580471 2.694608 2.687120 2.734314 2.989838</span></a>
 <a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt;  neval cld</span></a>
 <a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt;     10  a </span></a>
 <a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt;     10   b</span></a></code></pre></div>
@@ -2019,77 +2019,77 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h3>Changing start time</h3>
 <p><code>pmatrix.simfs</code> limits the user to using <span class="math inline">\(s=0\)</span>. In <code>predict_transitions</code> this is fully customisable. For example, the call below shows estimates the 1-year transition probabilities conditioned on the individual being alive at 6 months (technically it also calculates the transition probabilities conditioned on being dead at 6 months in the third row, but these aren’t helpful). Notice how the probabilities of being dead at 1 year have decreased as a result.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">predict_transitions</span>(models, newdata, tmat, <span class="dt">times=</span><span class="dv">365</span>, <span class="dt">start_times =</span> <span class="dv">365</span><span class="op">/</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt;     age dissub start_time end_time start_state   healthy    illness</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML      182.5      365     healthy 0.8118644 0.07838118</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML      182.5      365     illness 0.0000000 0.89866157</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML      182.5      365       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;       death</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; 1 0.1097544</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; 2 0.1013384</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt;     age dissub start_time end_time start_state transplant         pr</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML      182.5      365  transplant  0.8164485 0.07595593</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML      182.5      365          pr  0.0000000 0.89971977</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML      182.5      365         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;         rfs</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; 1 0.1075956</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt; 2 0.1002802</span></a>
 <a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; 3 1.0000000</span></a></code></pre></div>
 <p>Multiple values of <span class="math inline">\(s\)</span> can be provided, such as the quarterly predictions below.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">predict_transitions</span>(models, newdata, tmat, <span class="dt">times=</span><span class="dv">365</span>, </a>
 <a class="sourceLine" id="cb15-2" data-line-number="2">                    <span class="dt">start_times =</span> <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>) <span class="op">*</span><span class="st"> </span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt;     age dissub start_time end_time start_state   healthy    illness</span></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; 1 20-40    AML      91.25      365     healthy 0.7016978 0.11646227</span></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt; 2 20-40    AML      91.25      365     illness 0.0000000 0.83461363</span></a>
-<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt; 3 20-40    AML      91.25      365       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt; 4 20-40    AML     182.50      365     healthy 0.8140123 0.07553048</span></a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt; 5 20-40    AML     182.50      365     illness 0.0000000 0.89841624</span></a>
-<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt; 6 20-40    AML     182.50      365       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt; 7 20-40    AML     273.75      365     healthy 0.9111550 0.03870743</span></a>
-<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt; 8 20-40    AML     273.75      365     illness 0.0000000 0.95209065</span></a>
-<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt; 9 20-40    AML     273.75      365       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;        death</span></a>
-<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt; 1 0.18183988</span></a>
-<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 2 0.16538637</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt;     age dissub start_time end_time start_state transplant         pr</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; 1 20-40    AML      91.25      365  transplant  0.7001847 0.11577411</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt; 2 20-40    AML      91.25      365          pr  0.0000000 0.83025200</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt; 3 20-40    AML      91.25      365         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt; 4 20-40    AML     182.50      365  transplant  0.8140735 0.07635835</span></a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt; 5 20-40    AML     182.50      365          pr  0.0000000 0.89605232</span></a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"><span class="co">#&gt; 6 20-40    AML     182.50      365         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb15-10" data-line-number="10"><span class="co">#&gt; 7 20-40    AML     273.75      365  transplant  0.9138192 0.03739553</span></a>
+<a class="sourceLine" id="cb15-11" data-line-number="11"><span class="co">#&gt; 8 20-40    AML     273.75      365          pr  0.0000000 0.95043123</span></a>
+<a class="sourceLine" id="cb15-12" data-line-number="12"><span class="co">#&gt; 9 20-40    AML     273.75      365         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"><span class="co">#&gt;          rfs</span></a>
+<a class="sourceLine" id="cb15-14" data-line-number="14"><span class="co">#&gt; 1 0.18404122</span></a>
+<a class="sourceLine" id="cb15-15" data-line-number="15"><span class="co">#&gt; 2 0.16974800</span></a>
 <a class="sourceLine" id="cb15-16" data-line-number="16"><span class="co">#&gt; 3 1.00000000</span></a>
-<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 4 0.11045727</span></a>
-<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt; 5 0.10158376</span></a>
+<a class="sourceLine" id="cb15-17" data-line-number="17"><span class="co">#&gt; 4 0.10956817</span></a>
+<a class="sourceLine" id="cb15-18" data-line-number="18"><span class="co">#&gt; 5 0.10394768</span></a>
 <a class="sourceLine" id="cb15-19" data-line-number="19"><span class="co">#&gt; 6 1.00000000</span></a>
-<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; 7 0.05013755</span></a>
-<a class="sourceLine" id="cb15-21" data-line-number="21"><span class="co">#&gt; 8 0.04790935</span></a>
+<a class="sourceLine" id="cb15-20" data-line-number="20"><span class="co">#&gt; 7 0.04878523</span></a>
+<a class="sourceLine" id="cb15-21" data-line-number="21"><span class="co">#&gt; 8 0.04956877</span></a>
 <a class="sourceLine" id="cb15-22" data-line-number="22"><span class="co">#&gt; 9 1.00000000</span></a></code></pre></div>
 <p>Finally, any combination of number of <span class="math inline">\(s\)</span> and <span class="math inline">\(t\)</span> can be specified provided that all <span class="math inline">\(s\)</span> are less than <span class="math inline">\(min(t)\)</span>.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">predict_transitions</span>(models, newdata, tmat, <span class="dt">times=</span><span class="kw">seq</span>(<span class="dv">2</span>)<span class="op">*</span><span class="dv">365</span>, </a>
 <a class="sourceLine" id="cb16-2" data-line-number="2">                    <span class="dt">start_times =</span> <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>) <span class="op">*</span><span class="st"> </span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt;      age dissub start_time end_time start_state   healthy    illness</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; 1  20-40    AML      91.25      365     healthy 0.6991471 0.11710310</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; 2  20-40    AML      91.25      365     illness 0.0000000 0.83637233</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt; 3  20-40    AML      91.25      365       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt; 4  20-40    AML      91.25      730     healthy 0.5278468 0.16235224</span></a>
-<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; 5  20-40    AML      91.25      730     illness 0.0000000 0.72484770</span></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; 6  20-40    AML      91.25      730       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; 7  20-40    AML     182.50      365     healthy 0.8139786 0.07651301</span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt; 8  20-40    AML     182.50      365     illness 0.0000000 0.90014379</span></a>
-<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt; 9  20-40    AML     182.50      365       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt; 10 20-40    AML     182.50      730     healthy 0.6145430 0.13832271</span></a>
-<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt; 11 20-40    AML     182.50      730     illness 0.0000000 0.77940640</span></a>
-<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt; 12 20-40    AML     182.50      730       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt; 13 20-40    AML     273.75      365     healthy 0.9114388 0.03807740</span></a>
-<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt; 14 20-40    AML     273.75      365     illness 0.0000000 0.95120984</span></a>
-<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co">#&gt; 15 20-40    AML     273.75      365       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb16-19" data-line-number="19"><span class="co">#&gt; 16 20-40    AML     273.75      730     healthy 0.6881242 0.11590980</span></a>
-<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; 17 20-40    AML     273.75      730     illness 0.0000000 0.82235885</span></a>
-<a class="sourceLine" id="cb16-21" data-line-number="21"><span class="co">#&gt; 18 20-40    AML     273.75      730       death 0.0000000 0.00000000</span></a>
-<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="co">#&gt;         death</span></a>
-<a class="sourceLine" id="cb16-23" data-line-number="23"><span class="co">#&gt; 1  0.18374981</span></a>
-<a class="sourceLine" id="cb16-24" data-line-number="24"><span class="co">#&gt; 2  0.16362767</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt;      age dissub start_time end_time start_state transplant         pr</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; 1  20-40    AML      91.25      365  transplant  0.6984386 0.11962717</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; 2  20-40    AML      91.25      365          pr  0.0000000 0.83520010</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt; 3  20-40    AML      91.25      365         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt; 4  20-40    AML      91.25      730  transplant  0.5279922 0.16228331</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; 5  20-40    AML      91.25      730          pr  0.0000000 0.72185167</span></a>
+<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; 6  20-40    AML      91.25      730         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt; 7  20-40    AML     182.50      365  transplant  0.8139833 0.07745797</span></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt; 8  20-40    AML     182.50      365          pr  0.0000000 0.90025963</span></a>
+<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt; 9  20-40    AML     182.50      365         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt; 10 20-40    AML     182.50      730  transplant  0.6153394 0.13685740</span></a>
+<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="co">#&gt; 11 20-40    AML     182.50      730          pr  0.0000000 0.77728256</span></a>
+<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="co">#&gt; 12 20-40    AML     182.50      730         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="co">#&gt; 13 20-40    AML     273.75      365  transplant  0.9116234 0.03793103</span></a>
+<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="co">#&gt; 14 20-40    AML     273.75      365          pr  0.0000000 0.95167270</span></a>
+<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="co">#&gt; 15 20-40    AML     273.75      365         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb16-19" data-line-number="19"><span class="co">#&gt; 16 20-40    AML     273.75      730  transplant  0.6891515 0.11301821</span></a>
+<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="co">#&gt; 17 20-40    AML     273.75      730          pr  0.0000000 0.82058739</span></a>
+<a class="sourceLine" id="cb16-21" data-line-number="21"><span class="co">#&gt; 18 20-40    AML     273.75      730         rfs  0.0000000 0.00000000</span></a>
+<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="co">#&gt;           rfs</span></a>
+<a class="sourceLine" id="cb16-23" data-line-number="23"><span class="co">#&gt; 1  0.18193422</span></a>
+<a class="sourceLine" id="cb16-24" data-line-number="24"><span class="co">#&gt; 2  0.16479990</span></a>
 <a class="sourceLine" id="cb16-25" data-line-number="25"><span class="co">#&gt; 3  1.00000000</span></a>
-<a class="sourceLine" id="cb16-26" data-line-number="26"><span class="co">#&gt; 4  0.30980099</span></a>
-<a class="sourceLine" id="cb16-27" data-line-number="27"><span class="co">#&gt; 5  0.27515230</span></a>
+<a class="sourceLine" id="cb16-26" data-line-number="26"><span class="co">#&gt; 4  0.30972453</span></a>
+<a class="sourceLine" id="cb16-27" data-line-number="27"><span class="co">#&gt; 5  0.27814833</span></a>
 <a class="sourceLine" id="cb16-28" data-line-number="28"><span class="co">#&gt; 6  1.00000000</span></a>
-<a class="sourceLine" id="cb16-29" data-line-number="29"><span class="co">#&gt; 7  0.10950838</span></a>
-<a class="sourceLine" id="cb16-30" data-line-number="30"><span class="co">#&gt; 8  0.09985621</span></a>
+<a class="sourceLine" id="cb16-29" data-line-number="29"><span class="co">#&gt; 7  0.10855878</span></a>
+<a class="sourceLine" id="cb16-30" data-line-number="30"><span class="co">#&gt; 8  0.09974037</span></a>
 <a class="sourceLine" id="cb16-31" data-line-number="31"><span class="co">#&gt; 9  1.00000000</span></a>
-<a class="sourceLine" id="cb16-32" data-line-number="32"><span class="co">#&gt; 10 0.24713425</span></a>
-<a class="sourceLine" id="cb16-33" data-line-number="33"><span class="co">#&gt; 11 0.22059360</span></a>
+<a class="sourceLine" id="cb16-32" data-line-number="32"><span class="co">#&gt; 10 0.24780322</span></a>
+<a class="sourceLine" id="cb16-33" data-line-number="33"><span class="co">#&gt; 11 0.22271744</span></a>
 <a class="sourceLine" id="cb16-34" data-line-number="34"><span class="co">#&gt; 12 1.00000000</span></a>
-<a class="sourceLine" id="cb16-35" data-line-number="35"><span class="co">#&gt; 13 0.05048377</span></a>
-<a class="sourceLine" id="cb16-36" data-line-number="36"><span class="co">#&gt; 14 0.04879016</span></a>
+<a class="sourceLine" id="cb16-35" data-line-number="35"><span class="co">#&gt; 13 0.05044556</span></a>
+<a class="sourceLine" id="cb16-36" data-line-number="36"><span class="co">#&gt; 14 0.04832730</span></a>
 <a class="sourceLine" id="cb16-37" data-line-number="37"><span class="co">#&gt; 15 1.00000000</span></a>
-<a class="sourceLine" id="cb16-38" data-line-number="38"><span class="co">#&gt; 16 0.19596598</span></a>
-<a class="sourceLine" id="cb16-39" data-line-number="39"><span class="co">#&gt; 17 0.17764115</span></a>
+<a class="sourceLine" id="cb16-38" data-line-number="38"><span class="co">#&gt; 16 0.19783030</span></a>
+<a class="sourceLine" id="cb16-39" data-line-number="39"><span class="co">#&gt; 17 0.17941261</span></a>
 <a class="sourceLine" id="cb16-40" data-line-number="40"><span class="co">#&gt; 18 1.00000000</span></a></code></pre></div>
 <p>Note that obtaining these additional probabilities does not increase the runtime of the function.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">microbenchmark</span>(<span class="st">&quot;time&quot;</span>=<span class="kw">predict_transitions</span>(models, newdata, tmat, </a>
@@ -2097,27 +2097,27 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb17-3" data-line-number="3">                                          <span class="dt">start_times =</span> <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>)<span class="op">*</span><span class="dv">365</span>),</a>
 <a class="sourceLine" id="cb17-4" data-line-number="4">               <span class="dt">times=</span><span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">#&gt; Unit: seconds</span></a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="co">#&gt;  expr      min       lq     mean   median      uq      max neval</span></a>
-<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#&gt;  time 1.438196 1.599979 1.868381 1.836807 2.02695 2.434443    10</span></a></code></pre></div>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="co">#&gt;  expr      min       lq     mean   median       uq      max neval</span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#&gt;  time 1.788811 1.875935 1.937403 1.912523 1.966886 2.159704    10</span></a></code></pre></div>
 </div>
 <div id="multiple-individuals" class="section level3">
 <h3>Multiple individuals</h3>
 <p>It’s useful to be able to estimating transition probabilities for multiple individuals at once, for example to see how the outcomes differ for patients with different characteristics. <code>predict_transitions</code> simply handles multiple rows supplied to <code>newdata</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">newdata_multi &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">age=</span><span class="kw">c</span>(<span class="st">&quot;20-40&quot;</span>, <span class="st">&quot;&gt;40&quot;</span>), <span class="dt">dissub=</span><span class="kw">c</span>(<span class="st">&quot;AML&quot;</span>, <span class="st">&quot;CML&quot;</span>))</a></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">predict_transitions</span>(models, newdata_multi, tmat, <span class="dt">times=</span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#&gt;     age dissub start_time end_time start_state   healthy   illness</span></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML          0      365     healthy 0.4681531 0.1956251</span></a>
-<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML          0      365     illness 0.0000000 0.6848053</span></a>
-<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML          0      365       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="co">#&gt; 4   &gt;40    CML          0      365     healthy 0.4301687 0.1995008</span></a>
-<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="co">#&gt; 5   &gt;40    CML          0      365     illness 0.0000000 0.6526225</span></a>
-<a class="sourceLine" id="cb19-8" data-line-number="8"><span class="co">#&gt; 6   &gt;40    CML          0      365       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="co">#&gt;       death</span></a>
-<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="co">#&gt; 1 0.3362218</span></a>
-<a class="sourceLine" id="cb19-11" data-line-number="11"><span class="co">#&gt; 2 0.3151947</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#&gt;     age dissub start_time end_time start_state transplant        pr</span></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML          0      365  transplant  0.4674171 0.1923438</span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML          0      365          pr  0.0000000 0.6825798</span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML          0      365         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="co">#&gt; 4   &gt;40    CML          0      365  transplant  0.4289364 0.1984512</span></a>
+<a class="sourceLine" id="cb19-7" data-line-number="7"><span class="co">#&gt; 5   &gt;40    CML          0      365          pr  0.0000000 0.6588705</span></a>
+<a class="sourceLine" id="cb19-8" data-line-number="8"><span class="co">#&gt; 6   &gt;40    CML          0      365         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"><span class="co">#&gt;         rfs</span></a>
+<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="co">#&gt; 1 0.3402391</span></a>
+<a class="sourceLine" id="cb19-11" data-line-number="11"><span class="co">#&gt; 2 0.3174202</span></a>
 <a class="sourceLine" id="cb19-12" data-line-number="12"><span class="co">#&gt; 3 1.0000000</span></a>
-<a class="sourceLine" id="cb19-13" data-line-number="13"><span class="co">#&gt; 4 0.3703304</span></a>
-<a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co">#&gt; 5 0.3473775</span></a>
+<a class="sourceLine" id="cb19-13" data-line-number="13"><span class="co">#&gt; 4 0.3726124</span></a>
+<a class="sourceLine" id="cb19-14" data-line-number="14"><span class="co">#&gt; 5 0.3411295</span></a>
 <a class="sourceLine" id="cb19-15" data-line-number="15"><span class="co">#&gt; 6 1.0000000</span></a></code></pre></div>
 <p>As with multiple times, <code>pmatrix.simfs</code> only handles a single individual at a time.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">pmatrix.simfs</span>(models, tmat, <span class="dt">newdata=</span>newdata_multi, <span class="dt">t=</span><span class="dv">365</span>)</a>
@@ -2127,11 +2127,11 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb21-2" data-line-number="2">    <span class="kw">pmatrix.simfs</span>(models, tmat, <span class="dt">newdata=</span>newdata_multi[i, ], <span class="dt">t=</span><span class="dv">365</span>)</a>
 <a class="sourceLine" id="cb21-3" data-line-number="3">}))</a>
 <a class="sourceLine" id="cb21-4" data-line-number="4"><span class="co">#&gt;         [,1]    [,2]    [,3]</span></a>
-<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="co">#&gt; [1,] 0.47039 0.19116 0.33845</span></a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="co">#&gt; [2,] 0.00000 0.68555 0.31445</span></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="co">#&gt; [1,] 0.47068 0.19060 0.33872</span></a>
+<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="co">#&gt; [2,] 0.00000 0.68909 0.31091</span></a>
 <a class="sourceLine" id="cb21-7" data-line-number="7"><span class="co">#&gt; [3,] 0.00000 0.00000 1.00000</span></a>
-<a class="sourceLine" id="cb21-8" data-line-number="8"><span class="co">#&gt; [4,] 0.42778 0.20008 0.37214</span></a>
-<a class="sourceLine" id="cb21-9" data-line-number="9"><span class="co">#&gt; [5,] 0.00000 0.65354 0.34646</span></a>
+<a class="sourceLine" id="cb21-8" data-line-number="8"><span class="co">#&gt; [4,] 0.42763 0.19850 0.37387</span></a>
+<a class="sourceLine" id="cb21-9" data-line-number="9"><span class="co">#&gt; [5,] 0.00000 0.65224 0.34776</span></a>
 <a class="sourceLine" id="cb21-10" data-line-number="10"><span class="co">#&gt; [6,] 0.00000 0.00000 1.00000</span></a></code></pre></div>
 </div>
 <div id="time-dependent-covariates" class="section level3">
@@ -2175,35 +2175,35 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb23-27" data-line-number="27"><span class="co">#&gt; AIC = 30587.34</span></a></code></pre></div>
 <p>To estimate transition probabilities for models with state-arrival times, the variables needs to be included in <code>newdata</code> with an <strong>initial value</strong>, i.e. the value this variable has when the global clock is 0.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">newdata_arrival &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">age=</span><span class="st">&quot;20-40&quot;</span>, <span class="dt">dissub=</span><span class="st">&quot;AML&quot;</span>, <span class="dt">Tstart=</span><span class="dv">0</span>)</a></code></pre></div>
-<p>Then in <code>predict_transitions</code> simply specify which variables in <code>newdata</code> are time-dependent, that is they increment at each transition along with the current clock value. This is particularly useful for modelling patient age at each state entry, rather than at the starting state. Notice how this slightly changes the probability of being in <em>death</em> from a person starting in <em>healthy</em> compared to the example below that omits the <code>tcovs</code> argument.</p>
+<p>Then in <code>predict_transitions</code> simply specify which variables in <code>newdata</code> are time-dependent, that is they increment at each transition along with the current clock value. This is particularly useful for modelling patient age at each state entry, rather than at the starting state. Notice how this slightly changes the probability of being in <em>rfs</em> from a person starting in <em>transplant</em> compared to the example below that omits the <code>tcovs</code> argument.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">predict_transitions</span>(models_arrival, newdata_arrival, tmat, <span class="dt">times=</span><span class="dv">365</span>, <span class="dt">tcovs=</span><span class="st">'Tstart'</span>)</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="co">#&gt;     age dissub Tstart start_time end_time start_state   healthy   illness</span></a>
-<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML      0          0      365     healthy 0.4737575 0.2175029</span></a>
-<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML      0          0      365     illness 0.0000000 0.6473591</span></a>
-<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML      0          0      365       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb25-6" data-line-number="6"><span class="co">#&gt;       death</span></a>
-<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="co">#&gt; 1 0.3087395</span></a>
-<a class="sourceLine" id="cb25-8" data-line-number="8"><span class="co">#&gt; 2 0.3526409</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="co">#&gt;     age dissub Tstart start_time end_time start_state transplant        pr</span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML      0          0      365  transplant  0.4686074 0.2204156</span></a>
+<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML      0          0      365          pr  0.0000000 0.6527343</span></a>
+<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML      0          0      365         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb25-6" data-line-number="6"><span class="co">#&gt;         rfs</span></a>
+<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="co">#&gt; 1 0.3109769</span></a>
+<a class="sourceLine" id="cb25-8" data-line-number="8"><span class="co">#&gt; 2 0.3472657</span></a>
 <a class="sourceLine" id="cb25-9" data-line-number="9"><span class="co">#&gt; 3 1.0000000</span></a></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">predict_transitions</span>(models_arrival, newdata_arrival, tmat, <span class="dt">times=</span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="co">#&gt;     age dissub Tstart start_time end_time start_state  healthy   illness</span></a>
-<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML      0          0      365     healthy 0.472175 0.1809571</span></a>
-<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML      0          0      365     illness 0.000000 0.6447332</span></a>
-<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML      0          0      365       death 0.000000 0.0000000</span></a>
-<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="co">#&gt;       death</span></a>
-<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="co">#&gt; 1 0.3468678</span></a>
-<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="co">#&gt; 2 0.3552668</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="co">#&gt;     age dissub Tstart start_time end_time start_state transplant        pr</span></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML      0          0      365  transplant  0.4717672 0.1835184</span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML      0          0      365          pr  0.0000000 0.6472682</span></a>
+<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML      0          0      365         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="co">#&gt;         rfs</span></a>
+<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="co">#&gt; 1 0.3447145</span></a>
+<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="co">#&gt; 2 0.3527318</span></a>
 <a class="sourceLine" id="cb26-9" data-line-number="9"><span class="co">#&gt; 3 1.0000000</span></a></code></pre></div>
 <p>This functionality is implemented in <code>pmatrix.simfs</code>, but the <code>tcovs</code> argument actually has no impact on the transition probabilities, as evidenced below.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">pmatrix.simfs</span>(models_arrival, tmat, <span class="dt">newdata=</span>newdata_arrival, <span class="dt">t=</span><span class="dv">365</span>, <span class="dt">tcovs=</span><span class="st">'Tstart'</span>)</a>
 <a class="sourceLine" id="cb27-2" data-line-number="2"><span class="co">#&gt;         [,1]    [,2]    [,3]</span></a>
-<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="co">#&gt; [1,] 0.46879 0.18320 0.34801</span></a>
-<a class="sourceLine" id="cb27-4" data-line-number="4"><span class="co">#&gt; [2,] 0.00000 0.64802 0.35198</span></a>
+<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="co">#&gt; [1,] 0.46821 0.18423 0.34756</span></a>
+<a class="sourceLine" id="cb27-4" data-line-number="4"><span class="co">#&gt; [2,] 0.00000 0.64516 0.35484</span></a>
 <a class="sourceLine" id="cb27-5" data-line-number="5"><span class="co">#&gt; [3,] 0.00000 0.00000 1.00000</span></a></code></pre></div>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">pmatrix.simfs</span>(models_arrival, tmat, <span class="dt">newdata=</span>newdata_arrival, <span class="dt">t=</span><span class="dv">365</span>)</a>
 <a class="sourceLine" id="cb28-2" data-line-number="2"><span class="co">#&gt;         [,1]    [,2]    [,3]</span></a>
-<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="co">#&gt; [1,] 0.47052 0.18364 0.34584</span></a>
-<a class="sourceLine" id="cb28-4" data-line-number="4"><span class="co">#&gt; [2,] 0.00000 0.64802 0.35198</span></a>
+<a class="sourceLine" id="cb28-3" data-line-number="3"><span class="co">#&gt; [1,] 0.47146 0.18363 0.34491</span></a>
+<a class="sourceLine" id="cb28-4" data-line-number="4"><span class="co">#&gt; [2,] 0.00000 0.64799 0.35201</span></a>
 <a class="sourceLine" id="cb28-5" data-line-number="5"><span class="co">#&gt; [3,] 0.00000 0.00000 1.00000</span></a></code></pre></div>
 </div>
 <div id="mixture-of-distributions" class="section level3">
@@ -2229,18 +2229,18 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li>Gompertz</li>
 </ul>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">predict_transitions</span>(models_mix, newdata, tmat, <span class="dt">times=</span><span class="dv">365</span>)</a>
-<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="co">#&gt;     age dissub start_time end_time start_state   healthy   illness</span></a>
-<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML          0      365     healthy 0.5400573 0.2076133</span></a>
-<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML          0      365     illness 0.0000000 0.6504390</span></a>
-<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML          0      365       death 0.0000000 0.0000000</span></a>
-<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="co">#&gt;       death</span></a>
-<a class="sourceLine" id="cb30-7" data-line-number="7"><span class="co">#&gt; 1 0.2523294</span></a>
-<a class="sourceLine" id="cb30-8" data-line-number="8"><span class="co">#&gt; 2 0.3495610</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="co">#&gt;     age dissub start_time end_time start_state transplant        pr</span></a>
+<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="co">#&gt; 1 20-40    AML          0      365  transplant  0.5399486 0.2051936</span></a>
+<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="co">#&gt; 2 20-40    AML          0      365          pr  0.0000000 0.6502348</span></a>
+<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="co">#&gt; 3 20-40    AML          0      365         rfs  0.0000000 0.0000000</span></a>
+<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="co">#&gt;         rfs</span></a>
+<a class="sourceLine" id="cb30-7" data-line-number="7"><span class="co">#&gt; 1 0.2548578</span></a>
+<a class="sourceLine" id="cb30-8" data-line-number="8"><span class="co">#&gt; 2 0.3497652</span></a>
 <a class="sourceLine" id="cb30-9" data-line-number="9"><span class="co">#&gt; 3 1.0000000</span></a></code></pre></div>
 <p><code>pmatrix.simfs</code> does not seem to function correctly under these situations.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">pmatrix.simfs</span>(models_mix, tmat, <span class="dt">newdata=</span>newdata, <span class="dt">t=</span><span class="dv">365</span>)</a>
 <a class="sourceLine" id="cb31-2" data-line-number="2"><span class="co">#&gt;         [,1]    [,2]    [,3]</span></a>
-<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="co">#&gt; [1,] 0.25046 0.00043 0.74911</span></a>
+<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="co">#&gt; [1,] 0.24991 0.00038 0.74971</span></a>
 <a class="sourceLine" id="cb31-4" data-line-number="4"><span class="co">#&gt; [2,] 0.00000 0.00000 1.00000</span></a>
 <a class="sourceLine" id="cb31-5" data-line-number="5"><span class="co">#&gt; [3,] 0.00000 0.00000 1.00000</span></a></code></pre></div>
 </div>
@@ -2251,31 +2251,31 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">length_of_stay</span>(models, </a>
 <a class="sourceLine" id="cb32-2" data-line-number="2">               <span class="dt">newdata=</span>newdata,</a>
 <a class="sourceLine" id="cb32-3" data-line-number="3">               tmat, <span class="dt">times=</span><span class="fl">365.25</span><span class="op">*</span><span class="dv">3</span>,</a>
-<a class="sourceLine" id="cb32-4" data-line-number="4">               <span class="dt">start=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb32-5" data-line-number="5"><span class="co">#&gt;         t start_state   age dissub  healthy illness    death</span></a>
-<a class="sourceLine" id="cb32-6" data-line-number="6"><span class="co">#&gt; 1 1095.75     healthy 20-40    AML 481.1478 208.125 406.4771</span></a></code></pre></div>
+<a class="sourceLine" id="cb32-4" data-line-number="4">               <span class="dt">start_state=</span><span class="st">'transplant'</span>)</a>
+<a class="sourceLine" id="cb32-5" data-line-number="5"><span class="co">#&gt;     age dissub       t start_state transplant       pr      rfs</span></a>
+<a class="sourceLine" id="cb32-6" data-line-number="6"><span class="co">#&gt; 1 20-40    AML 1095.75  transplant   485.8422 208.6771 401.2306</span></a></code></pre></div>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">totlos.simfs</span>(models, tmat, <span class="dt">t=</span><span class="fl">365.25</span><span class="op">*</span><span class="dv">3</span>, <span class="dt">start=</span><span class="dv">1</span>, <span class="dt">newdata=</span>newdata)</a>
 <a class="sourceLine" id="cb33-2" data-line-number="2"><span class="co">#&gt;        1        2        3 </span></a>
-<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="co">#&gt; 483.7011 209.4513 402.5976</span></a></code></pre></div>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="co">#&gt; 484.5698 204.9828 406.1974</span></a></code></pre></div>
 <p>Rather than provide a example for each argument like in the previous section, the code chunk below demonstrates that vectors can be provided to both <code>times</code> and <code>start</code>, and <code>newdata</code> accept a data frame with multiple rows.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">length_of_stay</span>(models, </a>
 <a class="sourceLine" id="cb34-2" data-line-number="2">               <span class="dt">newdata=</span><span class="kw">data.frame</span>(<span class="dt">age=</span><span class="kw">c</span>(<span class="st">&quot;&gt;40&quot;</span>, <span class="st">&quot;&gt;40&quot;</span>),</a>
 <a class="sourceLine" id="cb34-3" data-line-number="3">                                  <span class="dt">dissub=</span><span class="kw">c</span>(<span class="st">'CML'</span>, <span class="st">'AML'</span>)),</a>
 <a class="sourceLine" id="cb34-4" data-line-number="4">               tmat, <span class="dt">times=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)<span class="op">*</span><span class="fl">365.25</span>,</a>
-<a class="sourceLine" id="cb34-5" data-line-number="5">               <span class="dt">start=</span><span class="kw">c</span>(<span class="st">'healthy'</span>, <span class="st">'illness'</span>))</a>
-<a class="sourceLine" id="cb34-6" data-line-number="6"><span class="co">#&gt;          t start_state age dissub  healthy   illness     death</span></a>
-<a class="sourceLine" id="cb34-7" data-line-number="7"><span class="co">#&gt; 1   365.25     healthy &gt;40    AML 130.1801  42.08723  70.86068</span></a>
-<a class="sourceLine" id="cb34-8" data-line-number="8"><span class="co">#&gt; 2   365.25     healthy &gt;40    CML 139.2083  40.53569  63.94207</span></a>
-<a class="sourceLine" id="cb34-9" data-line-number="9"><span class="co">#&gt; 3   365.25     illness &gt;40    AML       NA 176.45366  66.70683</span></a>
-<a class="sourceLine" id="cb34-10" data-line-number="10"><span class="co">#&gt; 4   365.25     illness &gt;40    CML       NA 182.39022  60.20982</span></a>
-<a class="sourceLine" id="cb34-11" data-line-number="11"><span class="co">#&gt; 5  1095.75     healthy &gt;40    AML 264.6049 142.49200 322.28702</span></a>
-<a class="sourceLine" id="cb34-12" data-line-number="12"><span class="co">#&gt; 6  1095.75     healthy &gt;40    CML 294.5851 142.16103 294.31188</span></a>
-<a class="sourceLine" id="cb34-13" data-line-number="13"><span class="co">#&gt; 7  1095.75     illness &gt;40    AML       NA 430.57751 298.90394</span></a>
-<a class="sourceLine" id="cb34-14" data-line-number="14"><span class="co">#&gt; 8  1095.75     illness &gt;40    CML       NA 456.98951 270.81061</span></a>
-<a class="sourceLine" id="cb34-15" data-line-number="15"><span class="co">#&gt; 9  1826.25     healthy &gt;40    AML 343.8583 234.19292 637.58866</span></a>
-<a class="sourceLine" id="cb34-16" data-line-number="16"><span class="co">#&gt; 10 1826.25     healthy &gt;40    CML 392.3378 239.72500 586.36722</span></a>
-<a class="sourceLine" id="cb34-17" data-line-number="17"><span class="co">#&gt; 11 1826.25     illness &gt;40    AML       NA 627.41249 588.38993</span></a>
-<a class="sourceLine" id="cb34-18" data-line-number="18"><span class="co">#&gt; 12 1826.25     illness &gt;40    CML       NA 676.01155 536.98864</span></a></code></pre></div>
+<a class="sourceLine" id="cb34-5" data-line-number="5">               <span class="dt">start_state=</span><span class="kw">c</span>(<span class="st">'transplant'</span>, <span class="st">'pr'</span>))</a>
+<a class="sourceLine" id="cb34-6" data-line-number="6"><span class="co">#&gt;    age dissub       t start_state transplant        pr       rfs</span></a>
+<a class="sourceLine" id="cb34-7" data-line-number="7"><span class="co">#&gt; 1  &gt;40    CML  365.25  transplant  104.35800  29.69458  48.57242</span></a>
+<a class="sourceLine" id="cb34-8" data-line-number="8"><span class="co">#&gt; 2  &gt;40    AML  365.25  transplant   96.76163  31.97558  53.88779</span></a>
+<a class="sourceLine" id="cb34-9" data-line-number="9"><span class="co">#&gt; 3  &gt;40    CML  365.25          pr         NA 136.89014  45.73486</span></a>
+<a class="sourceLine" id="cb34-10" data-line-number="10"><span class="co">#&gt; 4  &gt;40    AML  365.25          pr         NA 132.45761  50.16739</span></a>
+<a class="sourceLine" id="cb34-11" data-line-number="11"><span class="co">#&gt; 5  &gt;40    CML 1095.75  transplant  222.39434 103.71705 221.76361</span></a>
+<a class="sourceLine" id="cb34-12" data-line-number="12"><span class="co">#&gt; 6  &gt;40    AML 1095.75  transplant  197.74962 107.18295 242.94243</span></a>
+<a class="sourceLine" id="cb34-13" data-line-number="13"><span class="co">#&gt; 7  &gt;40    CML 1095.75          pr         NA 341.83419 206.04081</span></a>
+<a class="sourceLine" id="cb34-14" data-line-number="14"><span class="co">#&gt; 8  &gt;40    AML 1095.75          pr         NA 323.83676 224.03824</span></a>
+<a class="sourceLine" id="cb34-15" data-line-number="15"><span class="co">#&gt; 9  &gt;40    CML 1826.25  transplant  297.18278 175.16040 440.78182</span></a>
+<a class="sourceLine" id="cb34-16" data-line-number="16"><span class="co">#&gt; 10 &gt;40    AML 1826.25  transplant  258.79311 175.92531 478.40658</span></a>
+<a class="sourceLine" id="cb34-17" data-line-number="17"><span class="co">#&gt; 11 &gt;40    CML 1826.25          pr         NA 505.10349 408.02151</span></a>
+<a class="sourceLine" id="cb34-18" data-line-number="18"><span class="co">#&gt; 12 &gt;40    AML 1826.25          pr         NA 472.17028 440.95472</span></a></code></pre></div>
 </div>
 <div id="state-flow-diagram" class="section level2">
 <h2>State flow diagram</h2>
@@ -2285,11 +2285,262 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p><span class="math display">\[P_{h,j}(s, t) = \Pr(X(t) = j\ |\ X(s) = h)\]</span></p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">time_points &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dt">by=</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span><span class="fl">365.25</span></a>
 <a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">plot_predicted_pathway</span>(models, tmat, newdata, time_points, <span class="dv">1</span>)</a></code></pre></div>
-<div id="htmlwidget-1a56834f3ddaf65a89c4" style="width:288px;height:288px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1a56834f3ddaf65a89c4">{"x":{"links":{"source":[0,1,2,3,4,0,1,6,2,7,3,8,4,9,0,1,6,11,2,7,12,3,8,13,4,9,14],"target":[1,2,3,4,5,6,7,7,8,8,9,9,10,10,11,12,12,12,13,13,13,14,14,14,15,15,15],"value":[35.4361557527784,24.0276878717105,17.9327505315079,14.0324639866048,11.3182926380733,20.7503797873191,3.91630965226841,16.98248760716,2.09405359701788,17.8916673573125,1.38101150151642,17.4811812398004,0.89745957728815,16.871860645621,43.8134644599025,7.49215822879949,3.76789218015913,43.8134644599025,4.0008837431848,3.00712990211587,55.0735148688611,2.51927504338667,2.50453971453001,62.0815285141618,1.81671177124334,1.99033209569579,67.1053432720784],"group":["healthy","healthy","healthy","healthy","healthy","healthy","healthy","illness","healthy","illness","healthy","illness","healthy","illness","healthy","healthy","illness","death","healthy","illness","death","healthy","illness","death","healthy","illness","death"]},"nodes":{"name":["","","","","","healthy","","","","","illness","","","","","death"],"group":["healthy","healthy","healthy","healthy","healthy","healthy","illness","illness","illness","illness","illness","death","death","death","death","death"]},"options":{"NodeID":"text","NodeGroup":"group","LinkGroup":"group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":null,"nodeWidth":15,"nodePadding":50,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":100,"sinksRight":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8046ed8fdc8698e89c01" style="width:288px;height:288px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8046ed8fdc8698e89c01">{"x":{"links":{"source":[0,1,2,3,4,0,1,6,2,7,3,8,4,9,0,1,6,11,2,7,12,3,8,13,4,9,14],"target":[1,2,3,4,5,6,7,7,8,8,9,9,10,10,11,12,12,12,13,13,13,14,14,14,15,15,15],"value":[34.9448123620309,23.622446239146,17.4934324216072,13.6173775729413,11.0321455817491,20.858920329119,3.80332734694165,17.0778095191421,2.18569272926712,17.9024295312492,1.35089845321189,17.693412135458,0.874761277986478,17.0155163656589,44.1962673088501,7.51903877594328,3.78111080997693,44.1962673088501,3.94332108827163,2.97870733483454,55.4964168947703,2.52515639545403,2.3947101250583,62.4184453178765,1.7104707132057,2.02879422301096,67.3383118383888],"group":["transplant","transplant","transplant","transplant","transplant","transplant","transplant","pr","transplant","pr","transplant","pr","transplant","pr","transplant","transplant","pr","rfs","transplant","pr","rfs","transplant","pr","rfs","transplant","pr","rfs"]},"nodes":{"name":["","","","","","transplant","","","","","pr","","","","","rfs"],"group":["transplant","transplant","transplant","transplant","transplant","transplant","pr","pr","pr","pr","pr","rfs","rfs","rfs","rfs","rfs"]},"options":{"NodeID":"text","NodeGroup":"group","LinkGroup":"group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":null,"nodeWidth":15,"nodePadding":50,"units":"","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":100,"sinksRight":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="discrete-event-simulation" class="section level2">
+<h2>Discrete event simulation</h2>
+<p>In addition to predicting an individual’s progression through the statespace, we can also simulate an entire cohort’s passage. This is useful for situations where we have a heterogeneous group and are interested in obtaining estimates of measures such as the amount of time spent in each state for individuals with certain covariates. A common use is in health economic modelling, where multi-state models are used to represent patient treatment pathways with costs associated with each treatment state. The application of multi-state modelling in these contexts is often referred to as <strong>discrete event simulation</strong> and can be used to estimate the total number of patients receiving a certain treatment in a given timeframe, or survival rates of individuals with certain characteristics.</p>
+<p>The <code>cohort_simulation</code> function provides this functionality, and is specified very similarly to the other functions in this package, requiring:</p>
+<ul>
+<li>a list of fitted <code>flexsurv</code> parametric models</li>
+<li>a transition matrix of the same format used above</li>
+<li>characteristics of individuals to be simulated stored in a data frame</li>
+</ul>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">sim &lt;-<span class="st"> </span><span class="kw">cohort_simulation</span>(models, ebmt3[, <span class="kw">c</span>(<span class="st">'age'</span>, <span class="st">'dissub'</span>)], tmat)</a></code></pre></div>
+<p>The output is a long data frame where each row corresponds to an individual entering a new state. The first rows below show that every individual enters the system in state 1 at time 0, which is the default behaviour.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">head</span>(sim)</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="co">#&gt;   id   age dissub      state time</span></a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="co">#&gt; 1  0   &gt;40    CML transplant    0</span></a>
+<a class="sourceLine" id="cb37-4" data-line-number="4"><span class="co">#&gt; 2  2   &gt;40    CML transplant    0</span></a>
+<a class="sourceLine" id="cb37-5" data-line-number="5"><span class="co">#&gt; 3  6 20-40    CML transplant    0</span></a>
+<a class="sourceLine" id="cb37-6" data-line-number="6"><span class="co">#&gt; 4 14   &gt;40    CML transplant    0</span></a>
+<a class="sourceLine" id="cb37-7" data-line-number="7"><span class="co">#&gt; 5 30  &lt;=20    ALL transplant    0</span></a>
+<a class="sourceLine" id="cb37-8" data-line-number="8"><span class="co">#&gt; 6 62  &lt;=20    ALL transplant    0</span></a></code></pre></div>
+<p>These initial conditions can be changed; for example, the <code>start_state</code> argument accepts either a single value representing the state that everyone enters in, or a vector of values with as many entries as there are observations in <code>newdata</code>. The simulation below evenly splits patients between starting in the initial state (<em>transplant</em>) and platelet recovery (state 2).</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">sim2 &lt;-<span class="st"> </span><span class="kw">cohort_simulation</span>(models, ebmt3[, <span class="kw">c</span>(<span class="st">'age'</span>, <span class="st">'dissub'</span>)], tmat, </a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">                         <span class="dt">start_state =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">nrow</span>(ebmt3), <span class="dt">replace=</span>T))</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="kw">head</span>(sim2)</a>
+<a class="sourceLine" id="cb38-4" data-line-number="4"><span class="co">#&gt;   id   age dissub state time</span></a>
+<a class="sourceLine" id="cb38-5" data-line-number="5"><span class="co">#&gt; 1  0   &gt;40    CML    pr    0</span></a>
+<a class="sourceLine" id="cb38-6" data-line-number="6"><span class="co">#&gt; 2  2   &gt;40    CML    pr    0</span></a>
+<a class="sourceLine" id="cb38-7" data-line-number="7"><span class="co">#&gt; 3  6 20-40    CML    pr    0</span></a>
+<a class="sourceLine" id="cb38-8" data-line-number="8"><span class="co">#&gt; 4 14   &gt;40    CML    pr    0</span></a>
+<a class="sourceLine" id="cb38-9" data-line-number="9"><span class="co">#&gt; 5 30  &lt;=20    ALL    pr    0</span></a>
+<a class="sourceLine" id="cb38-10" data-line-number="10"><span class="co">#&gt; 6 62  &lt;=20    ALL    pr    0</span></a></code></pre></div>
+<p>Likewise, the individuals don’t have to enter the simulation at <span class="math inline">\(t=0\)</span>. The <code>start_time</code> parameter is specified in the same manner as <code>start_state</code>, accepting either a single value or a vector containing a time for each individual. The example below shows the case where individuals enter the system every 10 days, which means having a transplant in the <code>ebmt3</code> dataset we’ve been using.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1">sim3 &lt;-<span class="st"> </span><span class="kw">cohort_simulation</span>(models, ebmt3[, <span class="kw">c</span>(<span class="st">'age'</span>, <span class="st">'dissub'</span>)], tmat, </a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">                         <span class="dt">start_state =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">nrow</span>(ebmt3), <span class="dt">replace=</span>T),</a>
+<a class="sourceLine" id="cb39-3" data-line-number="3">                         <span class="dt">start_time =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">10</span><span class="op">*</span>(<span class="kw">nrow</span>(ebmt3)<span class="op">-</span><span class="dv">1</span>), <span class="dt">by=</span><span class="dv">10</span>))</a>
+<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="kw">head</span>(sim3)</a>
+<a class="sourceLine" id="cb39-5" data-line-number="5"><span class="co">#&gt;   id   age dissub      state     time</span></a>
+<a class="sourceLine" id="cb39-6" data-line-number="6"><span class="co">#&gt; 1  0   &gt;40    CML transplant  0.00000</span></a>
+<a class="sourceLine" id="cb39-7" data-line-number="7"><span class="co">#&gt; 2  1   &gt;40    CML transplant 10.00000</span></a>
+<a class="sourceLine" id="cb39-8" data-line-number="8"><span class="co">#&gt; 3  2   &gt;40    CML         pr 20.00000</span></a>
+<a class="sourceLine" id="cb39-9" data-line-number="9"><span class="co">#&gt; 4  0   &gt;40    CML        rfs 24.62828</span></a>
+<a class="sourceLine" id="cb39-10" data-line-number="10"><span class="co">#&gt; 5  3 20-40    AML         pr 30.00000</span></a>
+<a class="sourceLine" id="cb39-11" data-line-number="11"><span class="co">#&gt; 6  4 20-40    AML transplant 40.00000</span></a></code></pre></div>
+<p>It is often useful to run a simulation over a set time-period; for example, if we are interested in looking at the cost to the health care provider from treating a particular disease over 10 years. The <code>time_limit</code> argument allows for this use-case by terminating the simulation at the given time.</p>
+<p>The model below uses the same incidence model of a transplant every ten days but now terminates at 10 years, which is reflected in the simulation output.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">sim4 &lt;-<span class="st"> </span><span class="kw">cohort_simulation</span>(models, ebmt3[, <span class="kw">c</span>(<span class="st">'age'</span>, <span class="st">'dissub'</span>)], tmat, </a>
+<a class="sourceLine" id="cb40-2" data-line-number="2">                         <span class="dt">start_state =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">nrow</span>(ebmt3), <span class="dt">replace=</span>T),</a>
+<a class="sourceLine" id="cb40-3" data-line-number="3">                         <span class="dt">start_time =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">10</span><span class="op">*</span>(<span class="kw">nrow</span>(ebmt3)<span class="op">-</span><span class="dv">1</span>), <span class="dt">by=</span><span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb40-4" data-line-number="4">                         <span class="dt">time_limit =</span> <span class="dv">10</span><span class="op">*</span><span class="fl">365.25</span>)</a>
+<a class="sourceLine" id="cb40-5" data-line-number="5"><span class="kw">tail</span>(sim4)</a>
+<a class="sourceLine" id="cb40-6" data-line-number="6"><span class="co">#&gt;      id   age dissub      state     time</span></a>
+<a class="sourceLine" id="cb40-7" data-line-number="7"><span class="co">#&gt; 625 361   &gt;40    AML         pr 3610.000</span></a>
+<a class="sourceLine" id="cb40-8" data-line-number="8"><span class="co">#&gt; 626 362   &gt;40    CML transplant 3620.000</span></a>
+<a class="sourceLine" id="cb40-9" data-line-number="9"><span class="co">#&gt; 627 363 20-40    ALL         pr 3630.000</span></a>
+<a class="sourceLine" id="cb40-10" data-line-number="10"><span class="co">#&gt; 628 364 20-40    AML transplant 3640.000</span></a>
+<a class="sourceLine" id="cb40-11" data-line-number="11"><span class="co">#&gt; 629 236  &lt;=20    CML        rfs 3645.622</span></a>
+<a class="sourceLine" id="cb40-12" data-line-number="12"><span class="co">#&gt; 630 365 20-40    AML transplant 3650.000</span></a></code></pre></div>
+</div>
+<div id="old-age-mortality" class="section level2">
+<h2>Old age mortality</h2>
+<p>One challenge with using simulation to obtain estimates is that it is possible to generate unrealistic situations, such as a person living for several hundred years, due to the use of unbounded probability distributions to model event times.</p>
+<p>For example, in the output of the first cohort simulation from the previous section, the oldest patient dies 616 years after the transplant!</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">sim <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(time)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="st">    </span><span class="kw">head</span>()</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4"><span class="co">#&gt;     id   age dissub state     time</span></a>
+<a class="sourceLine" id="cb41-5" data-line-number="5"><span class="co">#&gt; 1 1933 20-40    CML   rfs 225073.7</span></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6"><span class="co">#&gt; 2 1194  &lt;=20    CML   rfs 193852.1</span></a>
+<a class="sourceLine" id="cb41-7" data-line-number="7"><span class="co">#&gt; 3 1537 20-40    AML   rfs 176811.2</span></a>
+<a class="sourceLine" id="cb41-8" data-line-number="8"><span class="co">#&gt; 4  445 20-40    AML   rfs 134576.9</span></a>
+<a class="sourceLine" id="cb41-9" data-line-number="9"><span class="co">#&gt; 5 1573   &gt;40    CML   rfs 108092.2</span></a>
+<a class="sourceLine" id="cb41-10" data-line-number="10"><span class="co">#&gt; 6  861 20-40    AML   rfs 101983.3</span></a></code></pre></div>
+<p>To combat this, each of <code>prediction_transitions</code>, <code>length_of_stay</code>, and <code>cohort_simulation</code> allow the option to specify a hard limit after which a patient is considered dead, effectively placing bounds on the transition time distributions.</p>
+<p>This is achieved through 3 arguments:</p>
+<ul>
+<li><code>agelimit</code>: This is either <code>FALSE</code>, in which case no limit is applied, or is a numeric value detailing the requested limit</li>
+<li><code>agecol</code>: The column in <code>newdata</code> that holds the patient age at entry to the simulation</li>
+<li><code>agescale</code>: Often, age is measured on a different time-scale to the rest of the study. For example, in many health studies age will be measured in years while study time will be recorded in months or days. This argument provides the scaling factor to be applied to the individual’s age to place it on the same time-scale as the study. Defaults to 1.</li>
+</ul>
+<p>The example below shows how to use this in practice. Firstly, however, a dummy continuous age covariate needs to be added, as <code>ebmt3</code> only provides age groups. Here we are saying that anyone is considered dead at the age of 100 (not 100 years after having the transplant).</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="co"># Make dataset with age in</span></a>
+<a class="sourceLine" id="cb42-2" data-line-number="2">n_lt20 &lt;-<span class="st"> </span><span class="kw">sum</span>(ebmt3<span class="op">$</span>age <span class="op">==</span><span class="st"> '&lt;=20'</span>)</a>
+<a class="sourceLine" id="cb42-3" data-line-number="3">n_gt20 &lt;-<span class="st"> </span><span class="kw">sum</span>(ebmt3<span class="op">$</span>age <span class="op">==</span><span class="st"> '20-40'</span>)</a>
+<a class="sourceLine" id="cb42-4" data-line-number="4">n_gt40 &lt;-<span class="st"> </span><span class="kw">sum</span>(ebmt3<span class="op">$</span>age <span class="op">==</span><span class="st"> '&gt;40'</span>)</a>
+<a class="sourceLine" id="cb42-5" data-line-number="5">ebmt3<span class="op">$</span>age_cont &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb42-6" data-line-number="6">ebmt3<span class="op">$</span>age_cont[ebmt3<span class="op">$</span>age <span class="op">==</span><span class="st"> '&lt;=20'</span>] &lt;-<span class="st"> </span><span class="kw">runif</span>(n_lt20, <span class="dv">1</span>, <span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb42-7" data-line-number="7">ebmt3<span class="op">$</span>age_cont[ebmt3<span class="op">$</span>age <span class="op">==</span><span class="st"> '20-40'</span>] &lt;-<span class="st"> </span><span class="kw">runif</span>(n_gt20, <span class="dv">21</span>, <span class="dv">40</span>)</a>
+<a class="sourceLine" id="cb42-8" data-line-number="8">ebmt3<span class="op">$</span>age_cont[ebmt3<span class="op">$</span>age <span class="op">==</span><span class="st"> '&gt;40'</span>] &lt;-<span class="st"> </span><span class="kw">runif</span>(n_gt40, <span class="dv">40</span>, <span class="dv">80</span>)</a>
+<a class="sourceLine" id="cb42-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb42-10" data-line-number="10">sim5 &lt;-<span class="st"> </span><span class="kw">cohort_simulation</span>(models, ebmt3[, <span class="kw">c</span>(<span class="st">'age'</span>, <span class="st">'dissub'</span>, <span class="st">'age_cont'</span>)], tmat,</a>
+<a class="sourceLine" id="cb42-11" data-line-number="11">                          <span class="dt">agelimit=</span><span class="dv">36525</span>, <span class="dt">agecol=</span><span class="st">'age_cont'</span>)</a></code></pre></div>
+<p>The maximum state entry time is now 96 years, which means they died at the age of 100, showing that the hard limit is working.</p>
+<p><strong>NB: these arguments are also in the <code>predict_transitions</code> and <code>length_of_stay</code> functions, although they are less useful there.</strong></p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">sim5 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(time)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="st">    </span><span class="kw">head</span>()</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4"><span class="co">#&gt;     id  age dissub  age_cont  state     time</span></a>
+<a class="sourceLine" id="cb43-5" data-line-number="5"><span class="co">#&gt; 1 1250 &lt;=20    CML  4.174992 oldage 35000.08</span></a>
+<a class="sourceLine" id="cb43-6" data-line-number="6"><span class="co">#&gt; 2 1349 &lt;=20    ALL  1.058736    rfs 34454.84</span></a>
+<a class="sourceLine" id="cb43-7" data-line-number="7"><span class="co">#&gt; 3  973 &lt;=20    AML  6.309030 oldage 34220.63</span></a>
+<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="co">#&gt; 4 1693 &lt;=20    AML  7.023016 oldage 33959.84</span></a>
+<a class="sourceLine" id="cb43-9" data-line-number="9"><span class="co">#&gt; 5 1415 &lt;=20    AML  9.710997 oldage 32978.06</span></a>
+<a class="sourceLine" id="cb43-10" data-line-number="10"><span class="co">#&gt; 6  158 &lt;=20    AML 11.458598 oldage 32339.75</span></a></code></pre></div>
+</div>
+<div id="msrep2" class="section level2">
+<h2><code>msrep2</code></h2>
+<p>A large part of working with multi-state models involves converting raw data into a format suitable for transition-specific analysis. The <code>mstate</code> package provides the <code>msprep</code> function to aid with this; it converts from a wide data frame where each row corresponds to a given individual, to a long based format where each row relates to a possible state transition (observed or not).</p>
+<p>As an example using the same <code>ebmt3</code> dataset, we have the initial dataset in a wide format with: - a patient identifier (<code>id</code>) - two possible states that can be entered, specified by entry time (<code>prtime</code> and <code>rfstime</code>) and entry indicator (<code>prstat</code>, <code>rfsstat</code>) - individual level covariates (<code>dissub</code>, <code>age</code>, <code>drmatch</code>, <code>tcd</code>).</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">head</span>(ebmt3)</a>
+<a class="sourceLine" id="cb44-2" data-line-number="2"><span class="co">#&gt;   id prtime prstat rfstime rfsstat dissub   age            drmatch    tcd</span></a>
+<a class="sourceLine" id="cb44-3" data-line-number="3"><span class="co">#&gt; 1  1     23      1     744       0    CML   &gt;40    Gender mismatch No TCD</span></a>
+<a class="sourceLine" id="cb44-4" data-line-number="4"><span class="co">#&gt; 2  2     35      1     360       1    CML   &gt;40 No gender mismatch No TCD</span></a>
+<a class="sourceLine" id="cb44-5" data-line-number="5"><span class="co">#&gt; 3  3     26      1     135       1    CML   &gt;40 No gender mismatch No TCD</span></a>
+<a class="sourceLine" id="cb44-6" data-line-number="6"><span class="co">#&gt; 4  4     22      1     995       0    AML 20-40 No gender mismatch No TCD</span></a>
+<a class="sourceLine" id="cb44-7" data-line-number="7"><span class="co">#&gt; 5  5     29      1     422       1    AML 20-40 No gender mismatch No TCD</span></a>
+<a class="sourceLine" id="cb44-8" data-line-number="8"><span class="co">#&gt; 6  6     38      1     119       1    ALL   &gt;40 No gender mismatch No TCD</span></a>
+<a class="sourceLine" id="cb44-9" data-line-number="9"><span class="co">#&gt;   age_cont</span></a>
+<a class="sourceLine" id="cb44-10" data-line-number="10"><span class="co">#&gt; 1 59.73023</span></a>
+<a class="sourceLine" id="cb44-11" data-line-number="11"><span class="co">#&gt; 2 53.74845</span></a>
+<a class="sourceLine" id="cb44-12" data-line-number="12"><span class="co">#&gt; 3 65.54929</span></a>
+<a class="sourceLine" id="cb44-13" data-line-number="13"><span class="co">#&gt; 4 22.66798</span></a>
+<a class="sourceLine" id="cb44-14" data-line-number="14"><span class="co">#&gt; 5 36.65974</span></a>
+<a class="sourceLine" id="cb44-15" data-line-number="15"><span class="co">#&gt; 6 78.09712</span></a></code></pre></div>
+<p><code>msprep</code> then uses the transition matrix to form a data frame with each possible transition in the rows, for example, rows 1 and 2 reflect that individual 1 was in state 1 at time 0 and moved into state 2 at 23 days, thereby censoring the transition from 1-&gt;3 at the same timepoint.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">long &lt;-<span class="st"> </span><span class="kw">msprep</span>(<span class="dt">time=</span><span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">'prtime'</span>, <span class="st">'rfstime'</span>), </a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">               <span class="dt">status=</span><span class="kw">c</span>(<span class="ot">NA</span>, <span class="st">'prstat'</span>, <span class="st">'rfsstat'</span>), </a>
+<a class="sourceLine" id="cb45-3" data-line-number="3">               <span class="dt">data=</span>ebmt3, </a>
+<a class="sourceLine" id="cb45-4" data-line-number="4">               <span class="dt">trans=</span>tmat, </a>
+<a class="sourceLine" id="cb45-5" data-line-number="5">               <span class="dt">keep=</span><span class="kw">c</span>(<span class="st">'age'</span>, <span class="st">'dissub'</span>))</a>
+<a class="sourceLine" id="cb45-6" data-line-number="6"><span class="kw">head</span>(long)</a>
+<a class="sourceLine" id="cb45-7" data-line-number="7"><span class="co">#&gt; An object of class 'msdata'</span></a>
+<a class="sourceLine" id="cb45-8" data-line-number="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb45-9" data-line-number="9"><span class="co">#&gt; Data:</span></a>
+<a class="sourceLine" id="cb45-10" data-line-number="10"><span class="co">#&gt;   id from to trans Tstart Tstop time status age dissub</span></a>
+<a class="sourceLine" id="cb45-11" data-line-number="11"><span class="co">#&gt; 1  1    1  2     1      0    23   23      1 &gt;40    CML</span></a>
+<a class="sourceLine" id="cb45-12" data-line-number="12"><span class="co">#&gt; 2  1    1  3     2      0    23   23      0 &gt;40    CML</span></a>
+<a class="sourceLine" id="cb45-13" data-line-number="13"><span class="co">#&gt; 3  1    2  3     3     23   744  721      0 &gt;40    CML</span></a>
+<a class="sourceLine" id="cb45-14" data-line-number="14"><span class="co">#&gt; 4  2    1  2     1      0    35   35      1 &gt;40    CML</span></a>
+<a class="sourceLine" id="cb45-15" data-line-number="15"><span class="co">#&gt; 5  2    1  3     2      0    35   35      0 &gt;40    CML</span></a>
+<a class="sourceLine" id="cb45-16" data-line-number="16"><span class="co">#&gt; 6  2    2  3     3     35   360  325      1 &gt;40    CML</span></a></code></pre></div>
+<p>This is a very useful function since it saves a lot of time munging the data and is used in every multi-state modelling related analysis I do.</p>
+<p>However, it does have one slight limitation, in that the required wide format of the input data isn’t necessarily a natural way of organising state entry data. See <span class="citation">Wickham (2014)</span> for a discussion of what makes data ‘tidy’, but in this situation the unit of observation is a state entry and so this is what should be recorded on the rows, not necessarily an individual. Often I have to spend time converting from my raw data, where each row corresponds to a state entry, to this wide format before <code>msprep</code> can be used. Furthermore, having one column per state means that this function doesn’t allow for reversible Markov chains, where a person enters the same state more than once.</p>
+<p>To address this, <code>multistateutils</code> provides an alternative version of <code>msprep</code> that accepts data in long format. This function, unimaginitivly called <code>msprep2</code>, requires a data frame with 3 columns: <code>id</code>, <code>state</code>, and <code>time</code>, so that each individual has as many rows as they have state entries.</p>
+<p>Let’s show an example for the first 2 patients in <code>ebmt3</code>:</p>
+<ul>
+<li>The first enters <code>pr</code> at time 23 and has last follow-up at <span class="math inline">\(t=744\)</span>.</li>
+<li>Patient 2 enters <code>rfs</code> at time 35 before entering <code>rfs</code> at <span class="math inline">\(t=360\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1">ebmt3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb46-2" data-line-number="2"><span class="co">#&gt;   id prtime prstat rfstime rfsstat dissub age            drmatch    tcd</span></a>
+<a class="sourceLine" id="cb46-3" data-line-number="3"><span class="co">#&gt; 1  1     23      1     744       0    CML &gt;40    Gender mismatch No TCD</span></a>
+<a class="sourceLine" id="cb46-4" data-line-number="4"><span class="co">#&gt; 2  2     35      1     360       1    CML &gt;40 No gender mismatch No TCD</span></a>
+<a class="sourceLine" id="cb46-5" data-line-number="5"><span class="co">#&gt;   age_cont</span></a>
+<a class="sourceLine" id="cb46-6" data-line-number="6"><span class="co">#&gt; 1 59.73023</span></a>
+<a class="sourceLine" id="cb46-7" data-line-number="7"><span class="co">#&gt; 2 53.74845</span></a></code></pre></div>
+<p>In long format this is more straightforward and keeps the fields to a minimum, helping to focus on the states that actually are visited.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">entry &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id=</span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb47-2" data-line-number="2">                    <span class="dt">state=</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3">                    <span class="dt">time=</span><span class="kw">c</span>(<span class="dv">23</span>, <span class="dv">35</span>, <span class="dv">360</span>))</a>
+<a class="sourceLine" id="cb47-4" data-line-number="4">entry</a>
+<a class="sourceLine" id="cb47-5" data-line-number="5"><span class="co">#&gt;   id state time</span></a>
+<a class="sourceLine" id="cb47-6" data-line-number="6"><span class="co">#&gt; 1  1     2   23</span></a>
+<a class="sourceLine" id="cb47-7" data-line-number="7"><span class="co">#&gt; 2  2     2   35</span></a>
+<a class="sourceLine" id="cb47-8" data-line-number="8"><span class="co">#&gt; 3  2     3  360</span></a></code></pre></div>
+<p>Passing this into <code>msprep2</code> produces an output that looks similar, but not identical to the one from <code>msprep</code>. The discrepancy is in patient 1, as their right censored transition from state 2-&gt;3 is no longer included.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">msprep2</span>(entry, tmat)</a>
+<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="co">#&gt; # A tibble: 5 x 8</span></a>
+<a class="sourceLine" id="cb48-3" data-line-number="3"><span class="co">#&gt;      id  from    to trans Tstart Tstop  time status</span></a>
+<a class="sourceLine" id="cb48-4" data-line-number="4"><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb48-5" data-line-number="5"><span class="co">#&gt; 1     1     1     2     1      0    23    23      1</span></a>
+<a class="sourceLine" id="cb48-6" data-line-number="6"><span class="co">#&gt; 2     1     1     3     2      0    23    23      0</span></a>
+<a class="sourceLine" id="cb48-7" data-line-number="7"><span class="co">#&gt; 3     2     1     2     1      0    35    35      1</span></a>
+<a class="sourceLine" id="cb48-8" data-line-number="8"><span class="co">#&gt; 4     2     1     3     2      0    35    35      0</span></a>
+<a class="sourceLine" id="cb48-9" data-line-number="9"><span class="co">#&gt; 5     2     2     3     3     35   360   325      1</span></a></code></pre></div>
+<p>Censored observations are included by means of supplying a data frame to the <code>censors</code> argument with fields: <code>id</code> and <code>censor_time</code>. Note that below we only add a value for patient 1, since we have complete follow-up on patient 2.</p>
+<p>This is cleaner than <code>msprep</code> where all states that aren’t visited need to have a censored observation time supplied, even if a patient has entered a sink state, while here only a single last follow-up time per patient is required.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">cens &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id=</span><span class="dv">1</span>, <span class="dt">censor_time=</span><span class="dv">744</span>)</a>
+<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="kw">msprep2</span>(entry, tmat, <span class="dt">censors =</span> cens)</a>
+<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="co">#&gt; # A tibble: 6 x 8</span></a>
+<a class="sourceLine" id="cb49-4" data-line-number="4"><span class="co">#&gt;      id  from    to trans Tstart Tstop  time status</span></a>
+<a class="sourceLine" id="cb49-5" data-line-number="5"><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb49-6" data-line-number="6"><span class="co">#&gt; 1     1     1     2     1      0    23    23      1</span></a>
+<a class="sourceLine" id="cb49-7" data-line-number="7"><span class="co">#&gt; 2     1     1     3     2      0    23    23      0</span></a>
+<a class="sourceLine" id="cb49-8" data-line-number="8"><span class="co">#&gt; 3     1     2     3     3     23   744   721      0</span></a>
+<a class="sourceLine" id="cb49-9" data-line-number="9"><span class="co">#&gt; 4     2     1     2     1      0    35    35      1</span></a>
+<a class="sourceLine" id="cb49-10" data-line-number="10"><span class="co">#&gt; 5     2     1     3     2      0    35    35      0</span></a>
+<a class="sourceLine" id="cb49-11" data-line-number="11"><span class="co">#&gt; 6     2     2     3     3     35   360   325      1</span></a></code></pre></div>
+<p>The final difference from the <code>msprep</code> output is the lack of covaries. Like with the censoring times, these are parameterised by a data frame indexed by <code>id</code>, with the remaining columns being any covariate of interest.</p>
+<p>This method of supplying three separate tidy data frames for the state entry times, censor times, and covariates is consistent with how data is stored in relational databases and so should be familiar to most people already.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">covars &lt;-<span class="st"> </span>ebmt3 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(id, age, dissub)</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="kw">msprep2</span>(entry, tmat, <span class="dt">censors =</span> cens, <span class="dt">covars =</span> covars)</a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="co">#&gt; # A tibble: 6 x 10</span></a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="co">#&gt;      id  from    to trans Tstart Tstop  time status age   dissub</span></a>
+<a class="sourceLine" id="cb50-5" data-line-number="5"><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt; </span></a>
+<a class="sourceLine" id="cb50-6" data-line-number="6"><span class="co">#&gt; 1     1     1     2     1      0    23    23      1 &gt;40   CML   </span></a>
+<a class="sourceLine" id="cb50-7" data-line-number="7"><span class="co">#&gt; 2     1     1     3     2      0    23    23      0 &gt;40   CML   </span></a>
+<a class="sourceLine" id="cb50-8" data-line-number="8"><span class="co">#&gt; 3     1     2     3     3     23   744   721      0 &gt;40   CML   </span></a>
+<a class="sourceLine" id="cb50-9" data-line-number="9"><span class="co">#&gt; 4     2     1     2     1      0    35    35      1 &gt;40   CML   </span></a>
+<a class="sourceLine" id="cb50-10" data-line-number="10"><span class="co">#&gt; 5     2     1     3     2      0    35    35      0 &gt;40   CML   </span></a>
+<a class="sourceLine" id="cb50-11" data-line-number="11"><span class="co">#&gt; 6     2     2     3     3     35   360   325      1 &gt;40   CML</span></a></code></pre></div>
+<p>An additional benefit of using a long data frame for state entries is that it allows reversible transitions. As a quick demonstration, let us consider an extension of the illness-death model where a person can be cured, i.e. transition back from illness-&gt;healthy.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">states &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'healthy'</span>, <span class="st">'illness'</span>, <span class="st">'death'</span>)</a>
+<a class="sourceLine" id="cb51-2" data-line-number="2">tmat2 &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="ot">NA</span>, <span class="dv">3</span>, <span class="ot">NA</span>, <span class="dv">1</span>, <span class="ot">NA</span>, <span class="ot">NA</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="ot">NA</span>), <span class="dt">nrow=</span><span class="dv">3</span>, <span class="dt">ncol=</span><span class="dv">3</span>, </a>
+<a class="sourceLine" id="cb51-3" data-line-number="3">                <span class="dt">dimnames=</span><span class="kw">list</span>(states, states))</a>
+<a class="sourceLine" id="cb51-4" data-line-number="4">tmat2</a>
+<a class="sourceLine" id="cb51-5" data-line-number="5"><span class="co">#&gt;         healthy illness death</span></a>
+<a class="sourceLine" id="cb51-6" data-line-number="6"><span class="co">#&gt; healthy      NA       1     2</span></a>
+<a class="sourceLine" id="cb51-7" data-line-number="7"><span class="co">#&gt; illness       3      NA     4</span></a>
+<a class="sourceLine" id="cb51-8" data-line-number="8"><span class="co">#&gt; death        NA      NA    NA</span></a></code></pre></div>
+<p>I’ll generate two individuals:</p>
+<ol style="list-style-type: decimal">
+<li>Moves from healthy-&gt;illness-&gt;death</li>
+<li>Moves from healthy-&gt;illness ,then recovers and goes back into healthy, before getting ill again and subsequently dying.</li>
+</ol>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">multistate_entry &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id=</span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb52-2" data-line-number="2">                                    <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">4</span>)),</a>
+<a class="sourceLine" id="cb52-3" data-line-number="3">                               <span class="dt">state=</span><span class="kw">c</span>(<span class="st">'illness'</span>, <span class="st">'death'</span>,</a>
+<a class="sourceLine" id="cb52-4" data-line-number="4">                                       <span class="st">'illness'</span>, <span class="st">'healthy'</span>, <span class="st">'illness'</span>, <span class="st">'death'</span>),</a>
+<a class="sourceLine" id="cb52-5" data-line-number="5">                               <span class="dt">time=</span><span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">11</span>,</a>
+<a class="sourceLine" id="cb52-6" data-line-number="6">                                      <span class="dv">7</span>, <span class="dv">12</span>, <span class="dv">17</span>, <span class="dv">22</span>))</a>
+<a class="sourceLine" id="cb52-7" data-line-number="7">multistate_entry</a>
+<a class="sourceLine" id="cb52-8" data-line-number="8"><span class="co">#&gt;   id   state time</span></a>
+<a class="sourceLine" id="cb52-9" data-line-number="9"><span class="co">#&gt; 1  1 illness    6</span></a>
+<a class="sourceLine" id="cb52-10" data-line-number="10"><span class="co">#&gt; 2  1   death   11</span></a>
+<a class="sourceLine" id="cb52-11" data-line-number="11"><span class="co">#&gt; 3  2 illness    7</span></a>
+<a class="sourceLine" id="cb52-12" data-line-number="12"><span class="co">#&gt; 4  2 healthy   12</span></a>
+<a class="sourceLine" id="cb52-13" data-line-number="13"><span class="co">#&gt; 5  2 illness   17</span></a>
+<a class="sourceLine" id="cb52-14" data-line-number="14"><span class="co">#&gt; 6  2   death   22</span></a></code></pre></div>
+<p>And as can be seen below, this works with <code>msprep2</code>.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">msprep2</span>(multistate_entry, tmat2)</a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="co">#&gt; # A tibble: 12 x 8</span></a>
+<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="co">#&gt;       id  from    to trans Tstart Tstop  time status</span></a>
+<a class="sourceLine" id="cb53-4" data-line-number="4"><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb53-5" data-line-number="5"><span class="co">#&gt;  1     1     1     2     1      0     6     6      1</span></a>
+<a class="sourceLine" id="cb53-6" data-line-number="6"><span class="co">#&gt;  2     1     1     3     2      0     6     6      0</span></a>
+<a class="sourceLine" id="cb53-7" data-line-number="7"><span class="co">#&gt;  3     1     2     1     3      6    11     5      0</span></a>
+<a class="sourceLine" id="cb53-8" data-line-number="8"><span class="co">#&gt;  4     1     2     3     4      6    11     5      1</span></a>
+<a class="sourceLine" id="cb53-9" data-line-number="9"><span class="co">#&gt;  5     2     1     2     1      0     7     7      1</span></a>
+<a class="sourceLine" id="cb53-10" data-line-number="10"><span class="co">#&gt;  6     2     1     3     2      0     7     7      0</span></a>
+<a class="sourceLine" id="cb53-11" data-line-number="11"><span class="co">#&gt;  7     2     2     1     3      7    12     5      1</span></a>
+<a class="sourceLine" id="cb53-12" data-line-number="12"><span class="co">#&gt;  8     2     2     3     4      7    12     5      0</span></a>
+<a class="sourceLine" id="cb53-13" data-line-number="13"><span class="co">#&gt;  9     2     1     2     1     12    17     5      1</span></a>
+<a class="sourceLine" id="cb53-14" data-line-number="14"><span class="co">#&gt; 10     2     1     3     2     12    17     5      0</span></a>
+<a class="sourceLine" id="cb53-15" data-line-number="15"><span class="co">#&gt; 11     2     2     1     3     17    22     5      0</span></a>
+<a class="sourceLine" id="cb53-16" data-line-number="16"><span class="co">#&gt; 12     2     2     3     4     17    22     5      1</span></a></code></pre></div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2>References</h2>
 <div id="refs" class="references">
 <div id="ref-dewreede">
 <p>de Wreede, Liesbeth C, Marta Fiocco, and Hein Putter. 2011. “Mstate: An R Package for the Analysis of Competing Risks and Multi-State Models.” <em>Journal of Statistical Software</em> 38.</p>
+</div>
+<div id="ref-tidydata">
+<p>Wickham, Hadley. 2014. “Tidy Data.” <em>Journal of Statistical Software</em> 59.</p>
 </div>
 </div>
 </div>
