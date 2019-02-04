@@ -6,6 +6,9 @@ knitr::opts_chunk$set(
 )
 set.seed(17)  # For reproducibility's sake
 
+## ----incmsu, eval=T------------------------------------------------------
+library(multistateutils)
+
 ## ------------------------------------------------------------------------
 library(mstate)
 data(ebmt3)
@@ -33,7 +36,6 @@ models <- lapply(1:3, function(i) {
 newdata <- data.frame(age="20-40", dissub="AML")
 
 ## ----example1------------------------------------------------------------
-library(multistateutils)
 predict_transitions(models, newdata, tmat, times=365)
 
 ## ----example2------------------------------------------------------------
@@ -156,29 +158,29 @@ length_of_stay(models,
                tmat, times=c(1, 3, 5)*365.25,
                start_state=c('transplant', 'pr'))
 
-## ------------------------------------------------------------------------
-time_points <- seq(0, 10, by=2) * 365.25
-plot_predicted_pathway(models, tmat, newdata, time_points, 1)
+## ---- eval=F-------------------------------------------------------------
+#  time_points <- seq(0, 10, by=2) * 365.25
+#  plot_predicted_pathway(models, tmat, newdata, time_points, 1)
 
 ## ------------------------------------------------------------------------
-sim <- cohort_simulation(models, ebmt3[, c('age', 'dissub')], tmat)
+sim <- cohort_simulation(models, ebmt3, tmat)
 
 ## ------------------------------------------------------------------------
 head(sim)
 
 ## ------------------------------------------------------------------------
-sim2 <- cohort_simulation(models, ebmt3[, c('age', 'dissub')], tmat, 
+sim2 <- cohort_simulation(models, ebmt3, tmat, 
                          start_state = sample(c(1, 2), nrow(ebmt3), replace=T))
 head(sim2)
 
 ## ------------------------------------------------------------------------
-sim3 <- cohort_simulation(models, ebmt3[, c('age', 'dissub')], tmat, 
+sim3 <- cohort_simulation(models, ebmt3, tmat, 
                          start_state = sample(c(1, 2), nrow(ebmt3), replace=T),
                          start_time = seq(0, 10*(nrow(ebmt3)-1), by=10))
 head(sim3)
 
 ## ------------------------------------------------------------------------
-sim4 <- cohort_simulation(models, ebmt3[, c('age', 'dissub')], tmat, 
+sim4 <- cohort_simulation(models, ebmt3, tmat, 
                          start_state = sample(c(1, 2), nrow(ebmt3), replace=T),
                          start_time = seq(0, 10*(nrow(ebmt3)-1), by=10),
                          time_limit = 10*365.25)
@@ -199,7 +201,7 @@ ebmt3$age_cont[ebmt3$age == '<=20'] <- runif(n_lt20, 1, 20)
 ebmt3$age_cont[ebmt3$age == '20-40'] <- runif(n_gt20, 21, 40)
 ebmt3$age_cont[ebmt3$age == '>40'] <- runif(n_gt40, 40, 80)
 
-sim5 <- cohort_simulation(models, ebmt3[, c('age', 'dissub', 'age_cont')], tmat,
+sim5 <- cohort_simulation(models, ebmt3, tmat,
                           agelimit=36525, agecol='age_cont')
 
 ## ------------------------------------------------------------------------

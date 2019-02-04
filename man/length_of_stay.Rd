@@ -5,8 +5,9 @@
 \title{Estimates length of stay}
 \usage{
 length_of_stay(models, newdata, trans_mat, times, start_state = 1,
-  tcovs = NULL, N = 1e+05, M = 1000, ci = FALSE, ci_margin = 0.95,
-  agelimit = FALSE, agecol = "age", agescale = 365.25)
+  tcovs = NULL, N = 1e+05, M = 1000, ci = FALSE,
+  ci_margin = 0.95, agelimit = FALSE, agecol = "age",
+  agescale = 365.25)
 }
 \arguments{
 \item{models}{List of \code{flexsurvreg} objects.}
@@ -31,7 +32,7 @@ incremented by the simulation clock at each transition, such as age when modelle
 
 \item{ci_margin}{Confidence interval range to use if \code{ci} is set to \code{TRUE}.}
 
-\item{agelimit}{Whether to automatically assign people to an 'early death' state. 
+\item{agelimit}{Whether to automatically assign people to an 'early death' state.
 This is useful as otherwise individuals can be assigned unrealistic time-to-events due to the
 nature of sampling times from a random number distribution.
 If this value is \code{FALSE} then no limit is applied, otherwise provide the time-limit
@@ -47,7 +48,7 @@ time-scale while age is typically measured in years.}
 A data frame containing length of stay estimates.
 }
 \description{
-Estimates length of stay in each state of an individual's passage 
+Estimates length of stay in each state of an individual's passage
 through a multi-state model
 by discrete event simulation.
 }
@@ -60,12 +61,12 @@ library(flexsurv)
 # Convert data to long
 data(ebmt3)
 tmat <- trans.illdeath()
-long <- msprep(time=c(NA, 'prtime', 'rfstime'), 
-               status=c(NA, 'prstat', 'rfsstat'), 
-               data=ebmt3, 
-               trans=tmat, 
+long <- msprep(time=c(NA, 'prtime', 'rfstime'),
+               status=c(NA, 'prstat', 'rfsstat'),
+               data=ebmt3,
+               trans=tmat,
                keep=c('age', 'dissub'))
-               
+
 # Fit parametric models
 models <- lapply(1:3, function(i) {
     flexsurvreg(Surv(time, status) ~ age + dissub, data=long, dist='weibull')
@@ -75,7 +76,7 @@ models <- lapply(1:3, function(i) {
 newdata <- data.frame(age="20-40", dissub="AML")
 
 # Estimate length of stay in each state after a year, given starting in state 1
-length_of_stay(models, 
+length_of_stay(models,
                newdata=newdata,
                tmat, times=365.25,
                start=1)

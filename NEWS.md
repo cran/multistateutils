@@ -1,3 +1,13 @@
+# multistateutils 1.2.2
+
+  - Fix for changes in data.table 1.12.1
+
+# multistateutils 1.2.1
+
+  - Added more examples
+  - Cleaned up build process
+  - Added GPL-3 licence and contributing information
+  
 # multistateutils 1.2.0
 
   - Added `cohort_simulation` function to run discrete event simulation over populations

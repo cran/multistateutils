@@ -39,7 +39,7 @@ incremented by the simulation clock at each transition, such as age when modelle
 
 \item{ci_margin}{Confidence interval range to use if \code{ci} is set to \code{TRUE}.}
 
-\item{agelimit}{Whether to automatically assign people to an 'early death' state. 
+\item{agelimit}{Whether to automatically assign people to an 'early death' state.
 This is useful as otherwise individuals can be assigned unrealistic time-to-events due to the
 nature of sampling times from a random number distribution.
 If this value is \code{FALSE} then no limit is applied, otherwise provide the time-limit
@@ -56,4 +56,25 @@ A data frame with state entry times for each individual.
 }
 \description{
 Runs a cohort discrete event simulation
+}
+\examples{
+library(multistateutils)
+library(mstate)
+library(flexsurv)
+
+# Convert data to long
+data(ebmt3)
+tmat <- trans.illdeath()
+long <- msprep(time=c(NA, 'prtime', 'rfstime'),
+               status=c(NA, 'prstat', 'rfsstat'),
+               data=ebmt3,
+               trans=tmat,
+               keep=c('age', 'dissub'))
+
+# Fit parametric models
+models <- lapply(1:3, function(i) {
+    flexsurvreg(Surv(time, status) ~ age + dissub, data=long, dist='weibull')
+})
+
+sim <- cohort_simulation(models, ebmt3, tmat)
 }
